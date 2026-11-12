@@ -41,7 +41,7 @@ const LABEL = {
 const KIND = {
   needs: { glyph: ["!", " "], ms: 400, tone: "blocked" },
   done: { glyph: ["★", "☆"], ms: 300, tone: "done" },
-  error: { glyph: ["✕", "✕"], ms: 300, tone: "ansi1" },
+  error: { glyph: ["✕"], tone: "ansi1" },
   warning: { glyph: ["▲", "△"], ms: 300, tone: "ansi3" },
   info: { glyph: ["✦", "✧"], ms: 300, tone: "accent" },
 };
@@ -72,35 +72,56 @@ const DEMO = [
   { title: "Gemini", body: "Rate limit reached", level: "error", icon: "icons/gemini.svg" },
 ];
 
-const queue = () => (Array.isArray(shared(QUEUE)) ? shared(QUEUE) : []);
+// The queue is saved with Herdr's shared state, so it can outlive a restart:
+// always drop expired cards when reading it.
+const stored = () => {
+  const q = shared(QUEUE);
+  return Array.isArray(q) ? q : [];
+};
+const live = (q) => q.filter((n) => !n.until || n.until > Date.now());
+const queue = () => live(stored());
+
+// Keep the newest KEEP cards, but drop other cards before a "needs you" one.
+function keep(q) {
+  const out = [...q];
+  while (out.length > KEEP) {
+    let i = out.length - 1;
+    while (i >= 0 && out[i].kind === "needs") i--;
+    out.splice(i >= 0 ? i : out.length - 1, 1);
+  }
+  return out;
+}
+
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const word = (hay, name) => new RegExp(`(^|[^a-z0-9])${esc(name)}([^a-z0-9]|$)`).test(hay);
+// Herdr's own notifications are titled "<Program> needs you" / "<Program> finished".
+const OWN = /^(.*?)\s+(needs you|finished)\s*$/i;
 
 // Which agent: the terminal the click goes to (Herdr's own notifications focus
-// the agent), else the icon file, else a whole word in the title.
+// the agent), else the icon file, else the program named in Herdr's own title.
 function agentOf(p) {
   const term = p.action?.args?.terminal;
   const a = term ? agents().find((x) => x.address === term) : null;
   const ids = [a?.app, a?.program?.key].filter(Boolean).map((s) => s.toLowerCase());
   const iconFile = (p.icon ?? "").toLowerCase().split("/").pop().replace(/\.svg$/, "");
-  const title = (p.title ?? "").toLowerCase();
+  const program = (OWN.exec(p.title ?? "")?.[1] ?? "").toLowerCase();
   const hit =
     AGENTS.find((g) => g.names.some((n) => ids.includes(n))) ??
     AGENTS.find((g) => g.names.includes(iconFile)) ??
-    AGENTS.find((g) => g.names.some((n) => word(title, n)));
+    AGENTS.find((g) => g.names.some((n) => word(program, n)));
   const status = a?.status ?? null;
   if (hit) return { name: hit.name, color: hit.color, icon: hit.icon, tint: hit.tint, status };
   if (a?.program?.agent) return { name: a.program.name, color: null, icon: a.program.icon, tint: a.program.tint, status };
   return { name: null, color: null, icon: p.icon ?? null, tint: false, status };
 }
 
-// What it is: the agent's status first (blocked: waiting for an answer or an
-// approval; done: finished), else Herdr's words, else the level.
+// What it is: an error level first, then the agent's status (blocked: waiting
+// for an answer or an approval; done: finished) or Herdr's own title, then the level.
 function kindOf(p, status) {
-  const text = `${p.title ?? ""} ${p.body ?? ""}`;
-  if (status === "blocked" || /needs you/i.test(text)) return "needs";
-  if (status === "done" || /finished/i.test(text) || p.level === "success") return "done";
   if (p.level === "error") return "error";
+  const own = OWN.exec(p.title ?? "")?.[2]?.toLowerCase();
+  if (status === "blocked" || own === "needs you") return "needs";
+  if (status === "done" || own === "finished" || p.level === "success") return "done";
   if (p.level === "warning") return "warning";
   return "info";
 }
@@ -117,9 +138,9 @@ export default class ToastAgent extends View {
     this.mono = MONO.find((f) => fonts().includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => {
-      const q = queue();
-      const live = q.filter((n) => !n.until || n.until > Date.now());
-      if (live.length !== q.length) setShared(QUEUE, live);
+      const q = stored();
+      const l = live(q);
+      if (l.length !== q.length) setShared(QUEUE, l);
     });
     cx.spawn(async () => {
       for (;;) {
@@ -144,7 +165,7 @@ export default class ToastAgent extends View {
       action: p.action ?? null,
       until: Date.now() + ms,
     };
-    setShared(QUEUE, [card, ...queue()].slice(0, KEEP));
+    setShared(QUEUE, keep([card, ...queue()]));
   }
 
   card(t, n) {
@@ -152,8 +173,10 @@ export default class ToastAgent extends View {
     const tone = t[kind.tone] ?? t.accent;
     const edge = n.color ?? t.accent;
     const note = n.kind === "needs" && n.action?.name ? LABEL.open : "";
-    // The heading already says who and what, so drop "X needs you" / "X finished".
-    const plain = /(needs you|finished)\s*$/i.test(n.title) || n.title === n.name;
+    const glyph = div().flex_none().w(12).text_size(13).font_bold().text_color(tone);
+    // The heading already says who and what, so drop "X needs you" / "X finished"
+    // (only when the agent is known: else the title is the only place it is named).
+    const plain = Boolean(n.name) && (OWN.test(n.title) || n.title === n.name);
     const line = (plain && n.body ? [n.body] : [n.title, n.body]).filter(Boolean).join(" · ");
 
     return h_flex()
@@ -189,7 +212,7 @@ export default class ToastAgent extends View {
               .gap(6)
               .items_center()
               .overflow_hidden()
-              .child(div().flex_none().w(12).text_size(13).font_bold().text_color(tone).frames(kind.glyph, kind.ms))
+              .child(kind.glyph.length > 1 ? glyph.frames(kind.glyph, kind.ms) : glyph.child(kind.glyph[0]))
               .child(div().flex_none().text_size(13).font_bold().text_color(edge).child(n.name ?? LABEL.fallback))
               .child(div().flex_1().truncate().text_size(13).font_bold().text_color(tone).child(LABEL[n.kind] ?? LABEL.info)),
           )
