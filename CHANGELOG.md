@@ -10,5 +10,6 @@ Each mod's `main.js` starts with the version it was released in.
 ## v0.1.0
 
 - Add `toast-agent`: notifications as cards in the top-right corner, framed in each agent's color and labeled Needs you, Done, Error, Warning or Notice.
-- Supported agents: Claude, Codex, Gemini, Cursor, Copilot, OpenCode, Amp, Kiro, Grok, Kimi, Crush, Antigravity. Others use Herdr's own name and icon.
+- Supported agents: Claude, Codex, Gemini, Cursor, Copilot, OpenCode, Amp, Kiro, Grok, Kimi, Crush, Antigravity.
+  Others use Herdr's own name and icon.
 - `herdr-app do toast-agent.demo` shows three sample cards.
