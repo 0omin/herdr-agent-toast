@@ -19,9 +19,16 @@ In short: copy its `mods/<name>/` folder into `~/.config/herdr-app/mods/`, then 
 
 Each example lives in its own folder with a `RECIPE.md` (what it does and how it is built) and a `preview.png`.
 
+## Develop
+
+`shared/core.js` is the one source for the code every example shares.
+After editing it, run `scripts/sync-core.sh` to copy it into each mod folder.
+`scripts/sync-core.sh --check` fails when a copy differs.
+
 ## Customize
 
-The words, colors, agents and timing are constants at the top of each `main.js`.
+The words, glyphs and timing are constants at the top of each `main.js`.
+The agents and their colors are the `AGENTS` table in `core.js`.
 
 ## Versions
 

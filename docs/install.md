@@ -4,28 +4,39 @@ Every example in this repo is one Herdr mod.
 Pick one, copy it, and point your layout at it.
 The steps below use `toast-agent`; for another example, put its name everywhere `toast-agent` appears.
 
+Needs Herdr app 0.1.15 or newer (the layout `"toast"` key).
+
 ## Ask your Herdr agent
 
-In a Herdr terminal, ask the agent:
+In a Herdr terminal, give your agent this:
 
 ```
-Read ~/.config/herdr-app/AGENTS.md, then add this mod: herdr.dev/mods/0omin/herdr-agent-toast--toast-agent
+Read ~/.config/herdr-app/AGENTS.md, then add the mod in this folder:
+https://github.com/0omin/herdr-agent-toast/tree/main/toast-agent
+Then wire it into my own layout (clone the shipped layout first if I am still on it):
+set the root "toast" to "toast-agent", and add a floating block for "toast-agent"
+(edge top, align end) on the node that holds my terminals.
+Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-agent.demo
 ```
-
-Then ask it to wire the mod into your layout as described in step 2 below.
 
 ## By hand
 
-1. Copy `toast-agent/mods/toast-agent/` to `~/.config/herdr-app/mods/toast-agent/`.
-   Copy the whole folder at once, with its `mod.json`.
+1. Use a layout of your own.
+   If you are on Herdr's default layout, clone it first (this also switches to the clone):
+   ```
+   herdr-app do layout.clone --name main --as my-main
+   ```
+2. Copy the folder `toast-agent/mods/toast-agent/` to `~/.config/herdr-app/mods/toast-agent/`.
+   Copy the whole folder at once: `mod.json`, `main.js` and `core.js`.
    If Herdr sees `main.js` before `mod.json`, it may dock the mod as a side panel.
-2. Edit your own layout, `~/.config/herdr-app/layouts/<yours>.json`:
+3. Edit your layout file, `~/.config/herdr-app/layouts/my-main.json`:
    - At the root, add `"toast": "toast-agent"`.
-   - On the node that holds your terminals, add:
+   - On the node that holds your terminals, add the floating block.
+     In a clone of the default layout that node has `"id": "work-body"`.
      ```json
      "floating": [{ "id": "toast-agent", "content": { "mod": "toast-agent" }, "edge": "top", "align": "end" }]
      ```
-3. Check it:
+4. Check it:
    ```
    herdr-app check ~/.config/herdr-app/mods/toast-agent
    herdr-app do toast-agent.demo
@@ -34,10 +45,10 @@ Then ask it to wire the mod into your layout as described in step 2 below.
 
 ## Good to know
 
-- Shipped layouts (such as `main`) are replaced when Herdr starts.
-  Clone one first (`herdr-app do layout.clone --name main`) and edit the clone.
-- The node id for the floating block differs between layouts.
-  Look for the node that contains your terminal block.
+- Shipped layouts (such as `main`) are replaced when Herdr starts, so edits to them do not last.
+  That is why step 1 clones.
 - `herdr-app do layout.set` replaces your layout and resets its theme and side panel sizes.
   Editing the JSON file keeps them.
+- To move the cards, change `edge` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`), or drag the block.
 - To go back to Herdr's own toast, remove the `"toast"` key and the floating entry.
+- To remove the mod, also delete `~/.config/herdr-app/mods/toast-agent/`.
