@@ -109,7 +109,7 @@ export function createQueue(key, max) {
     push(card) {
       const term = card.action?.args?.terminal;
       const old = live(stored()).filter((n) => !term || n.action?.args?.terminal !== term);
-      while (old.length >= max) {
+      while (old.length > 0 && old.length >= max) {
         let i = old.length - 1;
         while (i >= 0 && old[i].kind === "needs") i--;
         old.splice(i >= 0 ? i : old.length - 1, 1);
