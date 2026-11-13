@@ -87,7 +87,8 @@ export default class ToastQuest extends View {
       closeOverlay(p.overlay);
       return;
     }
-    this.width = Number(p.width) >= MIN_WIDTH ? Number(p.width) : WIDTH;
+    const w = Number(p.width);
+    this.width = Number.isFinite(w) && w > 0 ? Math.max(w, MIN_WIDTH) : WIDTH;
     const installed = fonts();
     this.mono = MONO.find((f) => installed.includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
@@ -108,7 +109,7 @@ export default class ToastQuest extends View {
     const edge = n.color ?? t.accent;
     const xp = Number(n.xp) || 0;
     const level = Math.floor(xp / XP_PER_LEVEL) + 1;
-    const lit = kind.full ? SEGMENTS : Math.round(((xp % XP_PER_LEVEL) / XP_PER_LEVEL) * SEGMENTS);
+    const lit = kind.full ? SEGMENTS : Math.floor(((xp % XP_PER_LEVEL) / XP_PER_LEVEL) * SEGMENTS);
     const note =
       n.kind === "done" ? `+${XP_PER_CLEAR} XP · LV ${level}` : n.kind === "needs" && n.action?.name ? LABEL.open : "";
     const narrow = this.width < NARROW;
@@ -142,7 +143,16 @@ export default class ToastQuest extends View {
             h_flex()
               .gap(6)
               .overflow_hidden()
-              .child(div().flex_none().text_size(12).font_bold().text_color(edge).child(n.name ?? LABEL.fallback))
+              .child(
+                div()
+                  .flex_none()
+                  .max_w(this.width * 0.4)
+                  .truncate()
+                  .text_size(12)
+                  .font_bold()
+                  .text_color(edge)
+                  .child(n.name ?? LABEL.fallback),
+              )
               .child(div().flex_1().truncate().text_size(12).text_color(t.foreground).child(lineOf(n)))
               .when(Boolean(note) && !narrow, (el) => el.child(noteEl())),
           )
