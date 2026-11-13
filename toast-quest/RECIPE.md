@@ -15,7 +15,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   Behind it, shifted 4 px down and right, a block in the agent color at 40% opacity: a hard pixel-game shadow.
   - Left: a 20 px glyph in the kind color, in a 24 px column.
   - Heading, 13 px extra bold, in the kind color.
-  - Line two, 12 px: the agent name in the agent color, bold, then the notification body, truncated.
+  - Line two, 12 px: the agent name in the agent color, bold (at most 40% of the card width), then the notification body, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent.
     On the right, in `muted`: `+50 XP · LV n` on a cleared quest, `click to open` on a boss card that has an action.
   - Line three: a bar of 10 segments, 5 px high, 2 px apart.
@@ -31,12 +31,12 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   | notice | `NEW MESSAGE` | `✦`/`✧` | `accent` | XP inside the level |
 
 - XP: every cleared quest adds 50 XP, and 500 XP make a level, starting at level 1.
-  Each card shows the total of the moment it arrived.
+  Each card shows the level and the bar of the moment it arrived.
 - Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
   Other agents use Herdr's own name for them, framed in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
-- A narrow spot, such as a sidebar: the floating block can pass a card width, `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (180 or more; default 360).
+- A narrow spot, such as a sidebar: the floating block can pass a card width, `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (default 360; a value under 180 counts as 180).
   Under 300 px the XP and `click to open` note moves to a row of its own, under line two.
 
 ## How it behaves
@@ -95,4 +95,4 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 1. `herdr-app check ~/.config/herdr-app/mods/toast-quest` passes.
 2. `herdr-app status` shows no errors and lists `toast-quest` under `floats`.
 3. `herdr-app do toast-quest.demo` shows three cards top right: Claude (orange frame, `BOSS APPEARED!`), Codex (blue frame, `QUEST CLEAR!`, `+50 XP`), Gemini (purple frame, `GAME OVER`).
-4. Running the demo again raises the XP on the Codex card by 50.
+4. Running the demo again lights one more bar segment on the Codex card; at 500 XP the bar empties and `LV` goes up.
