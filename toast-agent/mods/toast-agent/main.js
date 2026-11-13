@@ -69,9 +69,11 @@ export default class ToastAgent extends View {
     this.mono = MONO.find((f) => installed.includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => queue.prune());
-    cx.spawn(async () => {
+    // cx.notify() also ends this loop when a newer build of the file replaces it.
+    cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
+        cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
       }
     });

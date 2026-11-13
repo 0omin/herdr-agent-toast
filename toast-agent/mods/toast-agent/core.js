@@ -32,20 +32,25 @@ const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const word = (hay, name) => new RegExp(`(^|[^a-z0-9])${esc(name)}([^a-z0-9]|$)`).test(hay);
 
 // Which agent: the terminal the click goes to (Herdr's own notifications focus
-// the agent), else the icon file, else the program named in Herdr's own title.
+// the agent), else an icon from Herdr's icons/ folder, else the program named
+// in Herdr's own title. Titles are trusted only on notifications that focus an
+// agent, so "Amp server finished" from another mod is not Amp.
 // `name` is null when no agent could be told.
 export function agentOf(p) {
+  const focuses = p.action?.name === "agent.focus";
   const term = p.action?.args?.terminal;
   const a = term ? agents().find((x) => x.address === term) : null;
   const ids = [a?.app, a?.program?.key].filter(Boolean).map((s) => s.toLowerCase());
-  const iconFile = (p.icon ?? "").toLowerCase().split("/").pop().replace(/\.svg$/, "");
-  const program = (OWN.exec(p.title ?? "")?.[1] ?? "").toLowerCase();
+  const iconFile = /^icons\/([^/]+)\.svg$/i.exec(p.icon ?? "")?.[1]?.toLowerCase() ?? "";
+  const titled = focuses ? (OWN.exec(p.title ?? "")?.[1] ?? "").trim() : "";
   const hit =
     AGENTS.find((g) => g.names.some((n) => ids.includes(n))) ??
     AGENTS.find((g) => g.names.includes(iconFile)) ??
-    AGENTS.find((g) => g.names.some((n) => word(program, n)));
+    AGENTS.find((g) => g.names.some((n) => word(titled.toLowerCase(), n)));
   if (hit) return { name: hit.name, color: hit.color, icon: hit.icon, tint: hit.tint };
   if (a?.program?.agent) return { name: a.program.name, color: null, icon: a.program.icon, tint: a.program.tint };
+  // An agent Herdr named in its own title, whose terminal is already gone.
+  if (titled) return { name: titled, color: null, icon: p.icon ?? null, tint: false };
   return { name: null, color: null, icon: p.icon ?? null, tint: false };
 }
 
@@ -97,15 +102,19 @@ export function createQueue(key, max) {
   const live = (q) => q.filter((n) => !n.until || n.until > Date.now());
   return {
     cards: () => live(stored()),
-    // Over `max`: the oldest card that is not a "needs" card goes first.
+    // The new card always shows, and replaces older cards about the same
+    // terminal (an agent's latest news is the one that counts). Over `max`,
+    // the oldest card that is not a "needs" card goes first; when all are
+    // "needs", the oldest of those.
     push(card) {
-      const out = [card, ...live(stored())];
-      while (out.length > max) {
-        let i = out.length - 1;
-        while (i >= 0 && out[i].kind === "needs") i--;
-        out.splice(i >= 0 ? i : out.length - 1, 1);
+      const term = card.action?.args?.terminal;
+      const old = live(stored()).filter((n) => !term || n.action?.args?.terminal !== term);
+      while (old.length >= max) {
+        let i = old.length - 1;
+        while (i >= 0 && old[i].kind === "needs") i--;
+        old.splice(i >= 0 ? i : old.length - 1, 1);
       }
-      setShared(key, out);
+      setShared(key, [card, ...old]);
     },
     remove(id) {
       setShared(key, live(stored()).filter((n) => n.id !== id));
