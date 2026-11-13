@@ -14,7 +14,7 @@ More examples are on the way.
 
 ## Install
 
-With Herdr running (app 0.1.15 or newer), on macOS or Linux:
+With Herdr running (app 0.1.15 or newer), on macOS (Linux should work but is untested):
 
 ```
 curl -fsSL https://raw.githubusercontent.com/0omin/herdr-agent-toast/main/install.sh | sh -s toast-agent
@@ -22,6 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/0omin/herdr-agent-toast/main/instal
 
 Three sample cards appear in the top-right corner when it is done.
 The script copies the mod into `~/.config/herdr-app/mods/`, adds two entries to your layout, and backs up every file it changes.
+A layout that ships with Herdr is cloned first, and the clone is the one that changes.
 To take it out again, run the same line with `sh -s uninstall toast-agent`.
 
 [docs/install.md](docs/install.md) says exactly what the script does, and how to install by reading it first, through your Herdr agent, or by hand.

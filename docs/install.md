@@ -23,17 +23,28 @@ What the script does, all inside `~/.config/herdr-app`:
 
 It is careful with your files:
 
-- Every file it changes is first copied to `~/.config/herdr-app/.herdr-agent-toast/backups/`.
-- It does not use `sudo` and touches nothing outside that folder.
+- A file is copied to `~/.config/herdr-app/.herdr-agent-toast/backups/` before it is changed.
+- It does not use `sudo` and touches nothing outside `~/.config/herdr-app`.
+- Downloaded files are checked before they are installed, and the mod must pass `herdr-app check` before any layout points at it.
 - If it cannot tell where your terminals are in a custom layout, it leaves the layout alone and prints the two entries to add.
-- Running it again changes nothing that is already in place.
-- It needs `python3` to edit the layout file. Without it, the mod is copied and the two entries are printed.
+- Running it again when everything is in place changes nothing.
+- It will not replace or remove a mod folder named `toast-agent` that did not come from this repo.
+- It needs `python3` to edit the layout file.
+  Without it, the mod is copied and the two entries are printed.
+- The layout file is rewritten as plain JSON with 2-space indentation, so hand formatting is not kept.
 
-Take it out again (the layout gets its old `"toast"` value back, the mod folder moves to the backups):
+Tested on macOS.
+It is written for Linux too, but has not been run there yet.
+
+Take it out again:
 
 ```
 curl -fsSL https://raw.githubusercontent.com/0omin/herdr-agent-toast/main/install.sh | sh -s uninstall toast-agent
 ```
+
+Uninstall takes the two entries out of every layout that has them and puts back the `"toast"` value that was there before.
+If the installer cloned your layout, it switches back to the original; the clone's file stays, for you to delete or keep.
+The mod folder moves to the backups.
 
 ## Read it first
 
@@ -92,8 +103,8 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
 
 ## Good to know
 
-- `herdr-app do layout.set` replaces your layout and resets its theme and side panel sizes.
-  Editing the JSON file keeps them.
+- Edit the layout file rather than using `herdr-app do layout.set`.
+  On the author's machine (Herdr 0.1.15), `layout.set` also reset the layout's theme and side panel sizes.
 - To move the cards, change `edge` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`), or drag the block.
 - The agent colors are fixed.
   On a light theme the pale ones (Cursor, Antigravity) are faint; change them in the `AGENTS` table in `core.js`.
