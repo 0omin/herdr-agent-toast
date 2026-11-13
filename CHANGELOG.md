@@ -13,3 +13,4 @@ Each mod's `main.js` starts with the version it was released in.
 - Supported agents: Claude, Codex, Gemini, Cursor, Copilot, OpenCode, Amp, Kiro, Grok, Kimi, Crush, Antigravity.
   Others use Herdr's own name and icon.
 - `herdr-app do toast-agent.demo` shows three sample cards.
+- Add `install.sh`: one command to copy a mod, wire it into your layout (with backups) and show the demo; `uninstall` reverses it.

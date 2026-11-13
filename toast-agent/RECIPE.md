@@ -38,8 +38,11 @@ Its heading says what happened: the agent needs you, finished, or something went
 - Which agent, in this order: the terminal the notification's action focuses (`agents()` by address: its reported `app` and program key), the icon file name, then the program named in Herdr's own "X needs you" / "X finished" title.
   Herdr's own notifications carry no icon; their body is the space and tab name.
   The agent's status is not used: it still reads `working` at the moment the notification arrives.
-  Other titles are not searched, so "Cursor position saved" stays a Herdr card.
-- More than 3 cards: the oldest card that is not a needs-you card goes first.
+  A title is read only on notifications whose action is `agent.focus`, and an icon only from Herdr's `icons/` folder, so "Cursor position saved" or "Amp server finished" from another mod stays a Herdr card.
+  An agent that is not in the table and whose terminal is gone keeps the name from the title.
+- A new card always shows.
+  It replaces older cards about the same terminal, so each agent shows its latest news once.
+  More than 3 cards: the oldest card that is not a needs-you card goes first; when all are needs-you cards, the oldest of those.
 - Click a card: run its action (Herdr's own go to the agent) and remove the card.
   Cards also leave after their timeout (default 10 s).
 - Expired cards never show, even after Herdr restarts with an old queue.

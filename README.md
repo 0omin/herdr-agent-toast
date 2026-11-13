@@ -14,8 +14,17 @@ More examples are on the way.
 
 ## Install
 
-Pick an example and follow [docs/install.md](docs/install.md).
-In short: copy its `mods/<name>/` folder into `~/.config/herdr-app/mods/`, then set `"toast": "<name>"` and a floating block in your layout.
+With Herdr running (app 0.1.15 or newer), on macOS or Linux:
+
+```
+curl -fsSL https://raw.githubusercontent.com/0omin/herdr-agent-toast/main/install.sh | sh -s toast-agent
+```
+
+Three sample cards appear in the top-right corner when it is done.
+The script copies the mod into `~/.config/herdr-app/mods/`, adds two entries to your layout, and backs up every file it changes.
+To take it out again, run the same line with `sh -s uninstall toast-agent`.
+
+[docs/install.md](docs/install.md) says exactly what the script does, and how to install by reading it first, through your Herdr agent, or by hand.
 
 Each example lives in its own folder with a `RECIPE.md` (what it does and how it is built) and a `preview.png`.
 
