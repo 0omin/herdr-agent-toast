@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v0.1.0)
+# herdr-agent-toast installer (v0.2.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again
@@ -31,7 +31,7 @@ set -eu
 
 REPO="0omin/herdr-agent-toast"
 REF="${HERDR_TOAST_REF:-main}"
-EXAMPLES="toast-agent"
+EXAMPLES="toast-agent toast-quest"
 FILES="mod.json core.js main.js"
 MARK="// herdr-agent-toast v"
 # Layouts Herdr ships, for when installed.json cannot be read.
@@ -121,11 +121,18 @@ def wire(path, name, ours, state, backup):
                 target = parent or node
                 break
     wired = any(mod_of(e) == name for node, _ in nodes(data) for e in node.get("floating") or [])
+    # Another example from this repo gives way to this one, which takes its
+    # spot (node, edge, align, props).
+    for node, _ in nodes(data):
+        for entry in node.get("floating") or []:
+            if not wired and mod_of(entry) in ours and mod_of(entry) != name:
+                entry["id"] = name
+                entry["content"]["mod"] = name
+                wired = True
     if target is None and not wired:
         return 3
     prev = data.get("toast")
     data["toast"] = name
-    # Another example from this repo gives way to this one.
     drop_floating(data, lambda m: m in ours and m != name)
     if not wired:
         target.setdefault("floating", []).append(
