@@ -111,7 +111,8 @@ export default class ToastMinimal extends View {
             : image(n.icon).w(18).h(18).flex_none(),
       )
       .child(div().flex_none().max_w(this.width * 0.4).truncate().text_size(12).font_bold().text_color(edge).child(n.name ?? LABEL.fallback))
-      .child(div().flex_none().text_size(12).text_color(t.foreground).child(LABEL[n.kind] ?? LABEL.info))
+      // The words give way first when a pill is at its widest.
+      .child(div().min_w(0).truncate().text_size(12).text_color(t.foreground).child(LABEL[n.kind] ?? LABEL.info))
       .when(Boolean(more), (el) => el.child(div().flex_1().truncate().text_size(12).text_color(t.muted).child(more)))
       // Only a pill that waits for you blinks.
       .child(n.kind === "needs" ? dot.loop("opacity", { from: 1, to: 0.2, period: 800 }) : dot);

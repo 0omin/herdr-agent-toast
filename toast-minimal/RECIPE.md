@@ -19,16 +19,18 @@ Of the examples in this repo it covers the least screen.
     No icon: an 18 px circle in the agent color.
   - The agent name, 12 px bold, in the agent color (at most 40% of the widest a pill may be).
   - What happened, 12 px, in `foreground`: `needs you`, `is done`, `hit an error`, `has a warning`, `has news`.
+    These words are cut short first when a pill is at its widest.
   - A 7 px dot in the kind color: needs you theme `blocked`, done theme `done`, error `ansi1`, warning `ansi3`, notice `accent`.
     Only the needs-you dot pulses.
 - While the pointer is on a pill, the notification's text shows before the dot, in `muted`, truncated.
-  The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent.
+  The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent, or just the agent's name.
 - Pills differ in width, so they line up on the side the block sits on: left on the left edge, right on the right edge, and by `align` (`start`, `center`, `end`) on the top and bottom edges.
   The column has 5 px on each side, the same as Herdr's frame leaves above and below.
 - Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
   Other agents use Herdr's own name and icon for them, in the theme `accent`.
   Non-agent notifications show `Herdr`.
-- The app font; no monospace font is picked.
+- The app font (`ui_font` in Herdr's settings); no monospace font is picked.
+  The preview was taken with a monospace app font.
 - A narrow spot, such as a sidebar: the floating block can set the widest a pill may be, `"content": { "mod": "toast-minimal", "props": { "width": 228 } }` (default 360; a value under 180 counts as 180).
 
 ## How it behaves
