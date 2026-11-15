@@ -1,7 +1,7 @@
 # herdr-agent-toast
 
 Notification mods for [Herdr](https://herdr.dev): see at a glance which agent needs you and which one is done.
-Every example tells agents apart by color and icon (Claude, Codex, Gemini, ...) and notifications apart by kind (Needs you, Done, Error, ...).
+Every example tells agents apart by color (Claude, Codex, Gemini, ...) and notifications apart by kind (Needs you, Done, Error, ...).
 They differ in how they look and behave.
 
 ## Examples
@@ -9,6 +9,7 @@ They differ in how they look and behave.
 | Example | What it is | Preview |
 |---|---|---|
 | [`toast-agent`](toast-agent/RECIPE.md) | Cards in the top-right corner, framed in each agent's color (start here) | ![toast-agent](toast-agent/preview.png) |
+| [`toast-quest`](toast-quest/RECIPE.md) | 8-bit game cards: a boss when an agent needs you, XP for every finished task | ![toast-quest](toast-quest/preview.png) |
 
 More examples are on the way.
 
@@ -24,6 +25,7 @@ Three sample cards appear in the top-right corner when it is done.
 The script copies the mod into `~/.config/herdr-app/mods/`, adds two entries to your layout, and backs up every file it changes.
 A layout that ships with Herdr is cloned first, and the clone is the one that changes.
 To take it out again, run the same line with `sh -s uninstall toast-agent`.
+For another example, put its name in place of `toast-agent`; it takes the spot of the one you have.
 
 [docs/install.md](docs/install.md) says exactly what the script does, and how to install by reading it first, through your Herdr agent, or by hand.
 

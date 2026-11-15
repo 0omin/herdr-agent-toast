@@ -7,6 +7,13 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.2.0
+
+- Add `toast-quest`: notifications as 8-bit game cards (`BOSS APPEARED!`, `QUEST CLEAR!`, `GAME OVER`) with a hard shadow in the agent color.
+  Every finished task adds 50 XP, and 500 XP make a level.
+- `toast-quest` takes a card width from its floating block (`"props": { "width": 228 }`), for a narrow spot such as a sidebar.
+- `install.sh`: installing another example puts it where the one you have is (same node, edge, align and props) instead of back in the top-right corner.
+
 ## v0.1.0
 
 - Add `toast-agent`: notifications as cards in the top-right corner, framed in each agent's color and labeled Needs you, Done, Error, Warning or Notice.

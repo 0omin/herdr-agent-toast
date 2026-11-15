@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v0.1.0)
+# herdr-agent-toast installer (v0.2.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again
@@ -11,6 +11,8 @@
 #      (shipped layouts are replaced at every start, so edits do not last).
 #   4. Adds two entries to your layout file: "toast": "<example>" at the root,
 #      and a floating block for it over the node that holds your terminals.
+#      If the layout already floats another example from this repo, the new
+#      one takes that block's spot instead.
 #   5. Shows three sample cards.
 # Uninstall takes the two entries out of every layout that has them, puts back
 # the "toast" value that was there before, switches back from the clone, and
@@ -31,7 +33,7 @@ set -eu
 
 REPO="0omin/herdr-agent-toast"
 REF="${HERDR_TOAST_REF:-main}"
-EXAMPLES="toast-agent"
+EXAMPLES="toast-agent toast-quest"
 FILES="mod.json core.js main.js"
 MARK="// herdr-agent-toast v"
 # Layouts Herdr ships, for when installed.json cannot be read.
@@ -95,9 +97,13 @@ def mod_of(entry):
     content = entry.get("content") if isinstance(entry, dict) else None
     return content.get("mod") if isinstance(content, dict) else None
 
+def floats(node):
+    entries = node.get("floating")
+    return entries if isinstance(entries, list) else []
+
 def drop_floating(data, gone):
     for node, _ in nodes(data):
-        if isinstance(node.get("floating"), list):
+        if floats(node):
             kept = [e for e in node["floating"] if not gone(mod_of(e))]
             if kept:
                 node["floating"] = kept
@@ -120,12 +126,19 @@ def wire(path, name, ours, state, backup):
             if isinstance(content, dict) and "tab" in content:
                 target = parent or node
                 break
-    wired = any(mod_of(e) == name for node, _ in nodes(data) for e in node.get("floating") or [])
+    wired = any(mod_of(e) == name for node, _ in nodes(data) for e in floats(node))
+    # Another example from this repo gives way to this one, which takes its
+    # spot (node, edge, align, props).
+    for node, _ in nodes(data):
+        for entry in floats(node):
+            if not wired and mod_of(entry) in ours and mod_of(entry) != name:
+                entry["id"] = name
+                entry["content"]["mod"] = name
+                wired = True
     if target is None and not wired:
         return 3
     prev = data.get("toast")
     data["toast"] = name
-    # Another example from this repo gives way to this one.
     drop_floating(data, lambda m: m in ours and m != name)
     if not wired:
         target.setdefault("floating", []).append(
@@ -383,7 +396,7 @@ wire_layout() {
   if "$HERDR" status 2>/dev/null | python3 "$WORK/helper.py" healthy "$NAME"; then
     "$HERDR" do "$NAME.demo" >/dev/null 2>&1 || true
     say ""
-    say "Done. Three sample cards should be showing in the top-right corner."
+    say "Done. Three sample cards should be showing."
     say "To remove it, run install.sh again with: uninstall $NAME"
   else
     say ""
@@ -410,9 +423,9 @@ uninstall() {
     say "No layout uses $NAME."
   fi
 
-  # Back from a clone this script made.
+  # Back from a clone this script made, when this run took the mod out of it.
   layout="$(shown_layout || true)"
-  if [ -n "$layout" ] && [ -f "$STATE/$layout.cloned-from" ]; then
+  if [ -n "$layout" ] && [ -f "$STATE/$layout.cloned-from" ] && say "$changed" | grep -qxF -- "$layout"; then
     origin="$(cat "$STATE/$layout.cloned-from")"
     if "$HERDR" do layout.switch --name "$origin" >/dev/null 2>&1; then
       say "Switched back to layout \"$origin\"."

@@ -28,6 +28,8 @@ It is careful with your files:
 - Downloaded files are checked before they are installed, and the mod must pass `herdr-app check` before any layout points at it.
 - If it cannot tell where your terminals are in a custom layout, it leaves the layout alone and prints the two entries to add.
 - Running it again when everything is in place changes nothing.
+- Installing another example from this repo puts it in the spot of the one you have (same node, edge, align and props) in the layout you are on, and `"toast"` points at the new one.
+  The earlier example's folder stays in `mods/`.
 - It will not replace or remove a mod folder named `toast-agent` that did not come from this repo.
 - It needs `python3` to edit the layout file.
   Without it, the mod is copied and the two entries are printed.
@@ -106,6 +108,9 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
 - Edit the layout file rather than using `herdr-app do layout.set`.
   On the author's machine (Herdr 0.1.15), `layout.set` also reset the layout's theme and side panel sizes.
 - To move the cards, change `edge` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`), or drag the block.
+  To put them over another part of the window, move the floating entry to that node in the layout file.
+- `toast-quest` cards can be narrower than 360 px, for a spot such as a sidebar: `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (180 at the least).
+  `toast-agent` cards are always 360 px wide.
 - The agent colors are fixed.
   On a light theme the pale ones (Cursor, Antigravity) are faint; change them in the `AGENTS` table in `core.js`.
 - To go back to Herdr's own toast by hand, remove the `"toast"` key and the floating entry, then delete `~/.config/herdr-app/mods/toast-agent/`.
