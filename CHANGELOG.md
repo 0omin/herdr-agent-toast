@@ -7,6 +7,12 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.3.0
+
+- Add `toast-minimal`: each notification as one thin pill that says who and what (`Claude needs you`), with a dot in the color of its kind.
+  Point at a pill to read the rest; pills leave after 5 s.
+- `toast-minimal` takes `"props": { "width": 228 }` from its floating block too: there it is the widest a pill may be.
+
 ## v0.2.0
 
 - Add `toast-quest`: notifications as 8-bit game cards (`BOSS APPEARED!`, `QUEST CLEAR!`, `GAME OVER`) with a hard shadow in the agent color.

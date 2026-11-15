@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v0.2.0)
+# herdr-agent-toast installer (v0.3.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again
@@ -33,7 +33,7 @@ set -eu
 
 REPO="0omin/herdr-agent-toast"
 REF="${HERDR_TOAST_REF:-main}"
-EXAMPLES="toast-agent toast-quest"
+EXAMPLES="toast-agent toast-quest toast-minimal"
 FILES="mod.json core.js main.js"
 MARK="// herdr-agent-toast v"
 # Layouts Herdr ships, for when installed.json cannot be read.
