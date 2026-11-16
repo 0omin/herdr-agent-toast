@@ -11,6 +11,7 @@ They differ in how they look and behave.
 | [`toast-agent`](toast-agent/RECIPE.md) | Cards in the top-right corner, framed in each agent's color (start here) | ![toast-agent](toast-agent/preview.png) |
 | [`toast-quest`](toast-quest/RECIPE.md) | 8-bit game cards: a boss when an agent needs you, XP for every finished task | ![toast-quest](toast-quest/preview.png) |
 | [`toast-minimal`](toast-minimal/RECIPE.md) | One thin pill per notification: who and what, with a dot for the kind; point at it to read the rest | ![toast-minimal](toast-minimal/preview.png) |
+| [`toast-focus`](toast-focus/RECIPE.md) | Do not disturb: only needs-you and error cards show, and stay until clicked; finished tasks are just counted | ![toast-focus](toast-focus/preview.png) |
 
 More examples are on the way.
 

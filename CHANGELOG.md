@@ -7,6 +7,12 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.4.0
+
+- Add `toast-focus`: only an agent that needs you and an error get a card, and those cards stay until they are clicked.
+  Finished tasks, warnings and notices are counted in a chip under the cards (`✓ 2 done Codex, Claude +1 more`); a click clears it.
+- `toast-focus` takes a card width from its floating block (`"props": { "width": 228 }`), like `toast-quest`.
+
 ## v0.3.0
 
 - Add `toast-minimal`: each notification as one thin pill that says who and what (`Claude needs you`), with a dot in the color of its kind.
