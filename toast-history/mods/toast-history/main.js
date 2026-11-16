@@ -217,7 +217,8 @@ export default class ToastHistory extends View {
         v_flex()
           .id("toast-history-rows")
           .max_h(SHOW * ROW)
-          .overflow_y_scrollbar()
+          .min_h(0)
+          .overflow_y_scroll()
           .children(rows.map((n) => this.row(t, n, n.at > since))),
       );
   }

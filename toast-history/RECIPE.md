@@ -75,7 +75,7 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
   A row is new when its `at` is later.
 - Whether the list was opened by a click is kept in the view, not in shared state: after a restart the list is folded.
 - A 1 s timer looks whether it is time to fold, and redraws only then.
-- The rows scroll with `.max_h(8 * 26).overflow_y_scrollbar()`.
+- The rows scroll with `.max_h(8 * 26).min_h(0).overflow_y_scroll()`.
 - `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `fonts`, `notify`, `nextCommand`, `placement`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
   Its card queue is not used here: a queue lets a card go when its time is up, and a history keeps it.
