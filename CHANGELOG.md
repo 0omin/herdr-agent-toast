@@ -7,6 +7,14 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.5.0
+
+- Add `toast-history`: every notification becomes a row in a list of the last 20, kept across restarts.
+  A new one opens the list for 10 s; then it folds into a badge with the number of new rows (`≡ 3`).
+  Click the badge to open the list, a row to go to that agent, `clear` to empty it.
+- `toast-history` takes a list width from its floating block (`"props": { "width": 228 }`), like `toast-quest`.
+- `install.sh`: the closing message now says "Three sample notifications should be showing", as not every example shows cards.
+
 ## v0.4.0
 
 - Add `toast-focus`: only an agent that needs you and an error get a card, and those cards stay until they are clicked.

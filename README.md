@@ -12,6 +12,7 @@ They differ in how they look and behave.
 | [`toast-quest`](toast-quest/RECIPE.md) | 8-bit game cards: a boss when an agent needs you, XP for every finished task | ![toast-quest](toast-quest/preview.png) |
 | [`toast-minimal`](toast-minimal/RECIPE.md) | One thin pill per notification: who and what, with a dot for the kind; point at it to read the rest | ![toast-minimal](toast-minimal/preview.png) |
 | [`toast-focus`](toast-focus/RECIPE.md) | Do not disturb: only needs-you and error cards show, and stay until clicked; finished tasks are just counted | ![toast-focus](toast-focus/preview.png) |
+| [`toast-history`](toast-history/RECIPE.md) | A list that keeps the last 20 notifications: it opens for each new one, then folds into a badge with the number of new rows | ![toast-history](toast-history/preview.png) |
 
 More examples are on the way.
 
