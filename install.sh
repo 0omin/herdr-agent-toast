@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v0.4.0)
+# herdr-agent-toast installer (v0.5.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again
@@ -13,7 +13,7 @@
 #      and a floating block for it over the node that holds your terminals.
 #      If the layout already floats another example from this repo, the new
 #      one takes that block's spot instead.
-#   5. Shows three sample cards.
+#   5. Shows three sample notifications.
 # Uninstall takes the two entries out of every layout that has them, puts back
 # the "toast" value that was there before, switches back from the clone, and
 # moves the mod folder to the backups. The clone's file stays.
@@ -33,7 +33,7 @@ set -eu
 
 REPO="0omin/herdr-agent-toast"
 REF="${HERDR_TOAST_REF:-main}"
-EXAMPLES="toast-agent toast-quest toast-minimal toast-focus"
+EXAMPLES="toast-agent toast-quest toast-minimal toast-focus toast-history"
 FILES="mod.json core.js main.js"
 MARK="// herdr-agent-toast v"
 # Layouts Herdr ships, for when installed.json cannot be read.
@@ -396,7 +396,7 @@ wire_layout() {
   if "$HERDR" status 2>/dev/null | python3 "$WORK/helper.py" healthy "$NAME"; then
     "$HERDR" do "$NAME.demo" >/dev/null 2>&1 || true
     say ""
-    say "Done. Three sample cards should be showing."
+    say "Done. Three sample notifications should be showing."
     say "To remove it, run install.sh again with: uninstall $NAME"
   else
     say ""

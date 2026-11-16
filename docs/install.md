@@ -109,7 +109,7 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
   On the author's machine (Herdr 0.1.15), `layout.set` also reset the layout's theme and side panel sizes.
 - To move the cards, change `edge` (`top`, `right`, `bottom`, `left`) and `align` (`start`, `center`, `end`), or drag the block.
   To put them over another part of the window, move the floating entry to that node in the layout file.
-- `toast-quest` and `toast-focus` cards can be narrower than 360 px, for a spot such as a sidebar: `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (180 at the least).
+- `toast-quest` and `toast-focus` cards and the `toast-history` list can be narrower than 360 px, for a spot such as a sidebar: `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (180 at the least).
   `toast-minimal` takes the same prop: there it is the widest a pill may be.
   `toast-agent` cards are always 360 px wide.
 - The agent colors are fixed.
