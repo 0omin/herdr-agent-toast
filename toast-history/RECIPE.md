@@ -48,7 +48,8 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
   An agent that is not in the table and whose terminal is gone keeps the name from the title.
 - Every notification becomes a row, of any kind.
   The newest 20 are kept; a row is never replaced by a later one from the same agent.
-- A new notification opens the list for 10 s, or for the notification's own `timeout` when it is longer.
+- A new notification opens the list for 10 s, or for the notification's own `timeout` when it has one.
+  A list that is already open is never folded sooner by a later notification.
   Then the list folds into the badge.
   It does not fold while the pointer is on it.
 - New rows: the ones that came after you last folded the list or clicked a row.
@@ -93,6 +94,7 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
   `placement().hovered` is Herdr's own report for the floating block.
 - Hold the list open under the pointer only when it is already open, or pointing at the badge opens it and a click on the heading cannot fold it.
 - The titles and bodies of the last 20 notifications are in Herdr's shared state file on disk until `clear` is clicked.
+  Taking the mod out does not remove them.
 - Rows outlive a switch to another example: come back to this one and they are still listed.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
 - Tested with Herdr app 0.1.15 on macOS.
@@ -101,7 +103,7 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 
 1. `herdr-app check ~/.config/herdr-app/mods/toast-history` passes.
 2. `herdr-app status` shows no errors and lists `toast-history` under `floats`.
-3. `herdr-app do toast-history.demo` opens the list top right with three rows: Claude (`!`), Codex (`★`), Gemini (`✕`), all three on the `selection` background.
+3. With an empty list, `herdr-app do toast-history.demo` opens the list top right with three rows: Claude (`!`), Codex (`★`), Gemini (`✕`), all three on the `selection` background.
 4. About 10 s later, with the pointer elsewhere, the list folds into a badge reading `≡ 3`.
 5. Clicking the badge opens the list; clicking the heading folds it, and the badge reads `≡`.
 6. Clicking `clear` hides the block.

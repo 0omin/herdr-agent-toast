@@ -35,7 +35,7 @@ const NARROW = 300;
 const MONO = ["JetBrains Mono", "SF Mono", "Menlo", "Cascadia Mono", "Consolas", "DejaVu Sans Mono"];
 
 // Shared state: the rows (newest first), until when the list stays open, and
-// the time the list was last looked at (rows after it are new).
+// the time of the last fold or row click (rows after it are new).
 const LOG_KEY = "toast-history.log";
 const PEEK_KEY = "toast-history.peek";
 const SEEN_KEY = "toast-history.seen";
@@ -90,8 +90,9 @@ export default class ToastHistory extends View {
     this.isToast = Boolean(p.overlay) && typeof p.title === "string";
     if (this.isToast) {
       const { until, ...row } = cardOf(p, DEFAULT_MS);
-      setShared(LOG_KEY, [{ ...row, at: Date.now() }, ...log()].slice(0, KEEP));
+      // The open time first, so the row is not drawn as a badge for a moment.
       setShared(PEEK_KEY, Math.max(until, peek()));
+      setShared(LOG_KEY, [{ ...row, at: Date.now() }, ...log()].slice(0, KEEP));
       closeOverlay(p.overlay);
       return;
     }
@@ -125,13 +126,12 @@ export default class ToastHistory extends View {
     return this.wasOpen && Boolean(placement()?.hovered);
   }
 
-  // Folds the list; every row counts as looked at.
-  fold(cx) {
+  // Folds the list; no row is new any more. setShared redraws.
+  fold() {
     this.pinned = false;
     this.wasOpen = false;
     setShared(PEEK_KEY, 0);
     setShared(SEEN_KEY, Date.now());
-    cx.notify();
   }
 
   row(t, n, isNew) {
@@ -192,7 +192,7 @@ export default class ToastHistory extends View {
               .gap(6)
               .items_center()
               .cursor_pointer()
-              .on_click((_e, cx) => this.fold(cx))
+              .on_click(() => this.fold())
               .child(div().flex_none().text_size(12).text_color(t.muted).child(LABEL.fold))
               .child(div().truncate().text_size(12).font_bold().text_color(t.foreground).child(LABEL.title))
               .child(div().flex_none().text_size(12).text_color(t.muted).child(String(rows.length))),
@@ -205,12 +205,10 @@ export default class ToastHistory extends View {
               .text_color(t.muted)
               .cursor_pointer()
               .hover((s) => s.text_color(t.foreground))
-              .on_click((_e, cx) => {
+              .on_click(() => {
                 this.pinned = false;
-                this.wasOpen = false;
-                setShared(LOG_KEY, null);
                 setShared(PEEK_KEY, 0);
-                cx.notify();
+                setShared(LOG_KEY, null);
               })
               .child(LABEL.clear),
           ),
