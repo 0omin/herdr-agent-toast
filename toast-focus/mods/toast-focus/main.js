@@ -52,8 +52,8 @@ const KIND = {
   error: { glyph: ["✕"], tone: "ansi1" },
 };
 
-// Posted by `herdr-app do toast-focus.demo`: two cards and one more on the
-// chip. The first two have the titles and levels Herdr itself uses.
+// Posted by `herdr-app do toast-focus.demo`: two cards and one finished task
+// on the chip. The first two have the titles and levels Herdr itself uses.
 const DEMO = [
   { title: "Claude Code needs you", body: "Approve edit to app.ts", level: "error", icon: "icons/claude.svg" },
   { title: "Codex finished", body: "All tests passed", level: "info", icon: "icons/codex.svg" },
@@ -108,7 +108,8 @@ export default class ToastFocus extends View {
     const edge = n.color ?? t.accent;
     const note = n.kind === "needs" ? LABEL.stays : "";
     const narrow = this.width < NARROW;
-    const noteEl = () => div().flex_none().text_size(12).text_color(t.muted).child(note);
+    // The note is the first thing to give way when the card is short of room.
+    const noteEl = () => div().min_w(0).truncate().text_size(12).text_color(t.muted).child(note);
     const glyph = div().flex_none().w(12).text_size(13).font_bold().text_color(tone);
 
     return h_flex()
@@ -124,8 +125,9 @@ export default class ToastFocus extends View {
       .cursor_pointer()
       .hover((s) => s.bg(t.selection))
       .on_click(() => {
-        if (n.action?.name) run(n.action.name, n.action.args ?? {});
+        // Removed first: a card that stays must not survive a click that fails.
         queue.remove(n.id);
+        if (n.action?.name) run(n.action.name, n.action.args ?? {});
       })
       .child(
         !n.icon
@@ -146,8 +148,8 @@ export default class ToastFocus extends View {
               .overflow_hidden()
               .child(kind.glyph.length > 1 ? glyph.frames(kind.glyph, kind.ms) : glyph.child(kind.glyph[0]))
               .child(div().flex_none().max_w(this.width * 0.4).truncate().text_size(13).font_bold().text_color(edge).child(n.name ?? LABEL.fallback))
-              .child(div().flex_1().truncate().text_size(13).font_bold().text_color(tone).child(LABEL[n.kind] ?? LABEL.error))
-              .when(Boolean(note) && !narrow, (el) => el.child(noteEl())),
+              .child(div().min_w(0).truncate().text_size(13).font_bold().text_color(tone).child(KIND[n.kind] ? LABEL[n.kind] : LABEL.error))
+              .when(Boolean(note) && !narrow, (el) => el.child(noteEl().flex_1().text_right())),
           )
           .child(div().truncate().text_size(12).text_color(t.foreground).child(lineOf(n)))
           .when(Boolean(note) && narrow, (el) => el.child(noteEl())),

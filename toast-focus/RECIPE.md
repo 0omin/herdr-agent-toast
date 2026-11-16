@@ -17,7 +17,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
     Full-color icons are drawn as images; one-color icons are drawn in the agent color.
     No icon: a 22 px square in the frame color.
   - Heading row, 13 px bold: a glyph in the kind color, the agent name in the agent color (at most 40% of the card width), then the kind label in the kind color.
-    A needs-you card adds `stays until clicked` on the right, 12 px, in `muted`.
+    A needs-you card adds `stays until clicked` on the right, 12 px, in `muted`; it is cut short first when the row is full.
   - Line two, 12 px: the notification body, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent, or just the agent's name.
 - Kinds that get a card: needs you (`!` blinking, theme `blocked`, label `Needs you`) and error (`✕`, `ansi1`, label `Error`).
@@ -53,7 +53,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - A new card always shows.
   It replaces an older card about the same terminal, so each agent shows its latest news once.
   More than 3 cards: the oldest error card goes first; when all are needs-you cards, the oldest of those.
-- Click a card: run its action (Herdr's own go to the agent) and remove the card.
+- Click a card: remove the card and run its action (Herdr's own go to the agent).
 - Click the chip: the counts go back to zero and the chip hides.
 - The cards and the counts are in shared state, so they are still there after Herdr restarts.
 - `herdr-app do toast-focus.demo` posts three sample notifications: a Claude needs-you card, a Gemini error card, and one finished Codex task on the chip.
@@ -85,6 +85,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - A card does not know that you answered the agent in its terminal.
   It stays until you click it or that agent posts again.
 - A notification's own `timeout` is not used: cards stay, and counted notifications never show.
+- Cards and counts outlive a switch to another example: come back to this one and the old ones show again until clicked.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
 - Tested with Herdr app 0.1.15 on macOS.
 
