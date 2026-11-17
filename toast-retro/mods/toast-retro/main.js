@@ -34,7 +34,7 @@ const DESK = {
   pressed: "#B4B4B4",
   hi: "#FFFFFF",
   shade: "#808080",
-  dark: "#0A0A0A",
+  dark: "#000000",
   text: "#000000",
   title: "#FFFFFF",
   // Where every title bar fades to, and its start for a non-agent notification.
@@ -56,7 +56,7 @@ const KIND = {
   done: { said: "is done.", shape: "circle", mark: "✓", fill: "#FFFFFF", ink: "#0A7D2A" },
   error: { said: "hit an error.", shape: "circle", mark: "✕", fill: "#D32F2F", ink: "#FFFFFF" },
   warning: { said: "has a warning.", shape: "triangle", mark: "!", fill: "#FC9867", ink: "#000000" },
-  info: { said: "says:", shape: "circle", mark: "i", fill: "#1084D0", ink: "#FFFFFF" },
+  info: { said: "says:", shape: "circle", mark: "i", fill: "#2F6FD6", ink: "#FFFFFF" },
 };
 
 // Posted by `herdr-app do toast-retro.demo`. The first two have the titles
@@ -82,8 +82,8 @@ const shape = (points, paint) => {
 const RECT = [["0%", "0%"], ["100%", "0%"], ["100%", "100%"], ["0%", "100%"]];
 const TRIANGLE = [["50%", "0%"], ["100%", "100%"], ["0%", "100%"]];
 
-// A raised edge: light on the top and left, dark on the bottom and right,
-// two pixels deep.
+// A raised edge: 1 px of white on the top and left; 1 px of grey, then 1 px
+// of black, on the bottom and right.
 const raised = (content) =>
   div()
     .border_b(1)
@@ -191,7 +191,13 @@ export default class ToastRetro extends View {
           .flex_1()
           .min_w(0)
           .gap(2)
-          .child(div().truncate().text_size(12).text_color(DESK.text).child(`${name} ${kind.said}`))
+          // What happened is never cut short; a long name is cut instead.
+          .child(
+            h_flex()
+              .gap(7)
+              .child(div().flex_shrink(1).min_w(0).truncate().text_size(12).text_color(DESK.text).child(name))
+              .child(div().flex_none().text_size(12).text_color(DESK.text).child(kind.said)),
+          )
           .when(Boolean(line), (el) => el.child(div().truncate().text_size(12).text_color(DESK.text).child(line))),
       );
 

@@ -11,20 +11,21 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
 - A column of up to 2 boxes, 360 px wide, 6 px apart, in a floating block at the top edge, aligned to the end (right).
   Newest on top.
   The block is empty, and so hidden, when there are no boxes.
-- Each box is grey `#C0C0C0` on every theme, with a raised edge: white on the top and left, `#808080` and then `#0A0A0A` on the bottom and right.
+- Each box is grey `#C0C0C0` on every theme, with a raised edge: 1 px of white on the top and left; 1 px of `#808080` and then 1 px of black on the bottom and right.
   Text is black, 12 px, in the app font.
   - Title bar, 20 px high: a left-to-right gradient from the agent color to `#1B1B3A`, the agent name in bold white, and a small raised `×` button on the right.
   - Body, padding 10: a 28 px icon, then the message in two lines, each cut short when it is too long.
     Line one is `<name> <what happened>`: `Claude needs you.`, `Codex is done.`, `Gemini hit an error.`, `Herdr has a warning.`, `Herdr says:`.
+    What happened is never cut short: when the line is full, the name is cut instead.
     Line two is the notification body; the title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent, or just the agent's name.
     With no title and no body there is no line two.
   - Buttons on the right: `Open` and `Dismiss`, 64 px wide at the least, raised, a shade darker while pressed.
     The first button has an extra dark line around it, as a default button does.
     A notification with nothing to open has `Dismiss` only.
-- Icons: needs you, a yellow `#FFD866` triangle with `!`; done, a white circle with a green `#0A7D2A` ring and `✓`; error, a red `#D32F2F` circle with a white `✕`; warning, an orange `#FC9867` triangle with `!`; notice, a blue `#1084D0` circle with a white `i`.
+- Icons: needs you, a yellow `#FFD866` triangle with `!`; done, a white circle with a green `#0A7D2A` ring and `✓`; error, a red `#D32F2F` circle with a white `✕`; warning, an orange `#FC9867` triangle with `!`; notice, a blue `#2F6FD6` circle with a white `i`.
 - Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
-  Other agents use Herdr's own name for them, with a navy `#000080` title bar.
-  Non-agent notifications show `Herdr`, also navy.
+  Other agents use Herdr's own name for them, and their title bar fades from navy `#000080`.
+  Non-agent notifications show `Herdr`, also from navy.
 - No icons from the agents and no fonts or sounds of their own.
 - A narrow spot, such as a sidebar: the floating block can pass a box width, `"content": { "mod": "toast-retro", "props": { "width": 228 } }` (default 360; a value under 180 counts as 180).
 
@@ -61,7 +62,7 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
     A copy with `overlay` and a string `title` adds a card to `shared("toast-retro.queue")` (newest first, 2 kept) and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-retro", "content": { "mod": "toast-retro" }, "edge": "top", "align": "end" }`.
     That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
-- The raised edge is three nested boxes, each with two sides of a border: `border_b(1).border_r(1)` dark, `border_t(1).border_l(1)` white, `border_b(1).border_r(1)` grey.
+- The raised edge is three nested boxes, each with two sides of a border: `border_b(1).border_r(1)` black, `border_t(1).border_l(1)` white, `border_b(1).border_r(1)` grey.
 - The title bar gradient and the triangles are painted shapes: `window.paint_path(path, Background.linear_gradient(90, from, to))` or `Background.solid(color)`, with `PathBuilder` and `Background` from `gpui-kit`, as a layer that fills its box (`absolute().top(0).left(0).size_full()`).
 - The circles are `rounded_full()` boxes; the marks are text.
 - `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `notify`, `nextCommand`.
