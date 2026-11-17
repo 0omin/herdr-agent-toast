@@ -7,6 +7,14 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.7.0
+
+- Add `toast-retro`: notifications as grey dialog boxes with a title bar that fades from the agent color, an icon for the kind, and `Open` and `Dismiss` buttons.
+  Only the newest two show.
+  The boxes are grey on every theme, with no font or sound of their own.
+- `toast-retro` takes a box width from its floating block (`"props": { "width": 228 }`), like `toast-quest`.
+- `install.sh`: the closing message now says "Sample notifications should be showing", as `toast-retro` shows two of its three.
+
 ## v0.6.0
 
 - Add `toast-hud`: notifications as black control-room readouts with an uppercase status code (`AWAITING INPUT`, `COMPLETE`, `FAULT`, `CAUTION`, `NOTICE`).
