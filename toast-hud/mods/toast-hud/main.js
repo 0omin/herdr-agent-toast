@@ -123,14 +123,14 @@ export default class ToastHud extends View {
               .items_center()
               .overflow_hidden()
               .child(text("[", SCREEN.text))
-              .child(div().flex_none().max_w(this.width * 0.4).truncate().text_size(12).font_bold().text_color(edge).child((n.name ?? LABEL.fallback).toUpperCase()))
+              .child(div().flex_shrink(1).min_w(0).max_w(this.width * 0.4).truncate().text_size(12).font_bold().text_color(edge).child((n.name ?? LABEL.fallback).toUpperCase()))
               .child(text("]", SCREEN.text))
               .when(this.width >= NARROW, (el) => el.child(text(LABEL.status, SCREEN.text)))
+              // The status code is never cut; a long name is cut instead.
               .child(
                 h_flex()
-                  .flex_1()
-                  .min_w(0)
-                  .child(div().truncate().text_size(12).font_bold().text_color(kind.tone).child(kind.code))
+                  .flex_none()
+                  .child(div().text_size(12).font_bold().text_color(kind.tone).child(kind.code))
                   .when(n.kind === "needs", (el) => el.child(div().flex_none().text_size(12).text_color(kind.tone).frames(LABEL.cursor, 500))),
               ),
           )

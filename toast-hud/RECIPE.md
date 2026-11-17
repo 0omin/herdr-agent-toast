@@ -1,7 +1,7 @@
 # HUD Toast
 
 Notifications show as readouts on a control-room screen, stacked in the top-right corner of the window.
-Black panels, green monospace text, and an uppercase status code: `AWAITING INPUT`, `COMPLETE`, `FAULT`.
+Black panels, monospace text in green and cyan, and an uppercase status code: `AWAITING INPUT`, `COMPLETE`, `FAULT`.
 Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemini, Cursor, ...), and a cursor blinks when an agent needs you.
 
 ![HUD Toast](preview.png)
@@ -14,10 +14,12 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
 - Each card: a black panel `#0D100D` on every theme, `#1A211A` on hover, padding 14 by 10, 12 px text.
   - Two corner brackets in the agent color, 12 px, 2 px thick: top left and bottom right.
   - Heading row: `[` `CLAUDE` `]` `STATUS:` `AWAITING INPUT`.
-    The brackets and `STATUS:` in green `#A9DC76`; the agent name in capitals, bold, in the agent color (at most 40% of the card width); the status code in bold, in the kind color.
+    The square brackets and `STATUS:` in green `#A9DC76`; the agent name in capitals, bold, in the agent color (at most 40% of the card width); the status code in bold, in the kind color.
+    The status code is never cut short: when the row is full, the name is cut instead.
     A needs-you card ends with a `█` cursor that blinks every 500 ms.
   - Line two: `>` and the notification body, in cyan `#78DCE8`, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent, or just the agent's name.
+    With no title and no body there is no line two.
   - A done card adds a third line: `▮▮▮▮▮▮▮▮▮▮ 100%` in dim green `#5F8A3F`.
 - Status codes: needs you `AWAITING INPUT` (`#FF6188`), done `COMPLETE` (`#A9DC76`), error `FAULT` (`#FF6188`), warning `CAUTION` (`#FFD866`), notice `NOTICE` (`#78DCE8`).
 - Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
