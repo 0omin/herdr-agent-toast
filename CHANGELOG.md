@@ -7,6 +7,13 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v0.6.0
+
+- Add `toast-hud`: notifications as black control-room readouts with an uppercase status code (`AWAITING INPUT`, `COMPLETE`, `FAULT`, `CAUTION`, `NOTICE`).
+  Corner brackets are in the agent color, and a cursor blinks on a card that needs you.
+  The panels are black on every theme.
+- `toast-hud` takes a card width from its floating block (`"props": { "width": 228 }`), like `toast-quest`.
+
 ## v0.5.0
 
 - Add `toast-history`: every notification becomes a row in a list of the last 20, kept across restarts.

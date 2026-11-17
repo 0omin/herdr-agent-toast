@@ -13,6 +13,7 @@ They differ in how they look and behave.
 | [`toast-minimal`](toast-minimal/RECIPE.md) | One thin pill per notification: who and what, with a dot for the kind; point at it to read the rest | ![toast-minimal](toast-minimal/preview.png) |
 | [`toast-focus`](toast-focus/RECIPE.md) | Do not disturb: only needs-you and error cards show, and stay until clicked; finished tasks are just counted | ![toast-focus](toast-focus/preview.png) |
 | [`toast-history`](toast-history/RECIPE.md) | A list that keeps the last 20 notifications: it opens for each new one, then folds into a badge with the number of new rows | ![toast-history](toast-history/preview.png) |
+| [`toast-hud`](toast-hud/RECIPE.md) | A control-room screen: black panels, uppercase status codes, corner brackets in each agent's color, a blinking cursor when an agent needs you | ![toast-hud](toast-hud/preview.png) |
 
 More examples are on the way.
 
