@@ -78,7 +78,7 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
 - Float the mod once.
   In testing, with two floating blocks of `toast-hud`, one `demo` posted its three samples twice.
 - The panels stay black on a light theme on purpose; they do not follow the theme.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

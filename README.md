@@ -49,7 +49,7 @@ The agents and their colors are the `AGENTS` table in `core.js`.
 
 One version for the whole repo.
 See [CHANGELOG.md](CHANGELOG.md).
-Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## License
 

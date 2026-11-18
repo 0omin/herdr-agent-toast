@@ -83,7 +83,7 @@ Of the examples in this repo it covers the least screen.
 - Do not blink the dot with a timer: every redraw of a mod redraws the whole window.
 - A needs-you pill leaves after 5 s like the others.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

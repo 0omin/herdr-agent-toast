@@ -87,7 +87,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - A notification's own `timeout` is not used: cards stay, and counted notifications never show.
 - Cards and counts outlive a switch to another example: come back to this one and the old ones show again until clicked.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

@@ -88,7 +88,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - The shadow block comes before the card in the `relative` box, so the card is painted over it.
 - `☠`, `★` and the other glyphs are not in every monospace font; Herdr falls back to another installed font for them.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

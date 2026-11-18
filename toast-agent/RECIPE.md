@@ -72,7 +72,7 @@ Its heading says what happened: the agent needs you, finished, or something went
 - Do not sort by level first: Herdr's needs-you notification has level `error` and would show as an error card.
 - `shared()` is saved to disk, so the queue survives a restart: filter expired cards whenever you read it.
 - Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

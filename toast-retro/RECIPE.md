@@ -80,7 +80,7 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
 - `shared()` is saved to disk, so the queue survives a restart: filter expired cards whenever you read it.
 - Herdr ships its own retro layout with a pixel font and sounds; this mod uses none of them, so it looks the same on any layout and makes no sound.
 - The boxes stay grey on a dark theme on purpose; they do not follow the theme.
-- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 
