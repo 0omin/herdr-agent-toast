@@ -23,7 +23,7 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
     The first button has an extra dark line around it, as a default button does.
     A notification with nothing to open has `Dismiss` only.
 - Icons: needs you, a yellow `#FFD866` triangle with `!`; done, a white circle with a green `#0A7D2A` ring and `✓`; error, a red `#D32F2F` circle with a white `✕`; warning, an orange `#FC9867` triangle with `!`; notice, a blue `#2F6FD6` circle with a white `i`.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name for them, and their title bar fades from navy `#000080`.
   Non-agent notifications show `Herdr`, also from navy.
 - No icons from the agents and no fonts or sounds of their own.
@@ -80,7 +80,7 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
 - `shared()` is saved to disk, so the queue survives a restart: filter expired cards whenever you read it.
 - Herdr ships its own retro layout with a pixel font and sounds; this mod uses none of them, so it looks the same on any layout and makes no sound.
 - The boxes stay grey on a dark theme on purpose; they do not follow the theme.
-- Tested with Herdr app 0.1.15 on macOS.
+- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
 
 ## Done when
 

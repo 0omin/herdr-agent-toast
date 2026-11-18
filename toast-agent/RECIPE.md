@@ -19,12 +19,13 @@ Its heading says what happened: the agent needs you, finished, or something went
   - Line two, 12 px: the notification body, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent.
     Needs-you cards that have an action add `click to open` on the right, in `muted`.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name and icon for them, framed in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - Kinds: needs you (`!` blinking, theme `blocked`), done (`★`/`☆`, theme `done`), error (`✕`, `ansi1`), warning (`▲`/`△`, `ansi3`), notice (`✦`/`✧`, `accent`).
   Labels: `Needs you`, `Done`, `Error`, `Warning`, `Notice`.
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
+- A narrow spot, such as a sidebar: the floating block can pass a card width, `"content": { "mod": "toast-agent", "props": { "width": 228 } }` (default 360; a value under 180 counts as 180).
 
 ## How it behaves
 
@@ -70,8 +71,8 @@ Its heading says what happened: the agent needs you, finished, or something went
 - Clone a shipped layout before editing it; edit the person's own layout otherwise.
 - Do not sort by level first: Herdr's needs-you notification has level `error` and would show as an error card.
 - `shared()` is saved to disk, so the queue survives a restart: filter expired cards whenever you read it.
-- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
-- Tested with Herdr app 0.1.15 on macOS.
+- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
+- Tested with Herdr app 0.1.15 and 0.1.16 on macOS.
 
 ## Done when
 

@@ -113,5 +113,5 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
   `toast-minimal` takes the same prop: there it is the widest a pill may be.
   `toast-agent` cards are always 360 px wide.
 - The agent colors are fixed.
-  On a light theme the pale ones (Cursor, Antigravity) are faint; change them in the `AGENTS` table in `core.js`.
+  On a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint; change them in the `AGENTS` table in `core.js`.
 - To go back to Herdr's own toast by hand, remove the `"toast"` key and the floating entry, then delete `~/.config/herdr-app/mods/toast-agent/`.
