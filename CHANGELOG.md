@@ -7,6 +7,13 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v1.0.0
+
+- First stable release. It marks the start of the promise below, not a change: nothing in your setup needs to change.
+  From here on, a change you must follow in your setup raises the MAJOR version.
+- No mod, install step or layout wiring changed since v0.7.0; `install.sh` changed only its version comment.
+- The README no longer says more examples are on the way.
+
 ## v0.7.0
 
 - Add `toast-retro`: notifications as grey dialog boxes with a title bar that fades from the agent color, an icon for the kind, and `Open` and `Dismiss` buttons.
