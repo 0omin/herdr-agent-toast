@@ -9,9 +9,9 @@ Each mod's `main.js` starts with the version it was released in.
 
 ## v1.0.0
 
-- First stable release: the seven examples, `install.sh` and the layout wiring stay as they are in v0.7.0.
+- First stable release. It marks the start of the promise below, not a change: nothing in your setup needs to change.
   From here on, a change you must follow in your setup raises the MAJOR version.
-- No mod changed since v0.7.0.
+- No mod, install step or layout wiring changed since v0.7.0; `install.sh` changed only its version comment.
 - The README no longer says more examples are on the way.
 
 ## v0.7.0
