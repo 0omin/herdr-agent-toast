@@ -16,8 +16,6 @@ They differ in how they look and behave.
 | [`toast-hud`](toast-hud/RECIPE.md) | A control-room screen: black panels, uppercase status codes, corner brackets in each agent's color, a blinking cursor when an agent needs you | ![toast-hud](toast-hud/preview.png) |
 | [`toast-retro`](toast-retro/RECIPE.md) | Old desktop dialog boxes: a title bar in each agent's color, an icon for the kind, and Open and Dismiss buttons | ![toast-retro](toast-retro/preview.png) |
 
-More examples are on the way.
-
 ## Install
 
 With Herdr running (app 0.1.15 or newer), on macOS (Linux should work but is untested):
