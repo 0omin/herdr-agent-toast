@@ -14,11 +14,14 @@
 //
 // core.js tells the agent and the kind; this file keeps the log and draws.
 // `herdr-app do toast-history.demo` posts three sample notifications.
+// `herdr-app do toast-history.pick` (bind it to a key in keys.json) opens the
+// list, numbers the rows and goes to one from the keyboard; see createPicker
+// in core.js.
 
 import { View, div, image, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { props, closeOverlay, run, theme, fonts, notify, nextCommand, shared, setShared, placement } from "herdr";
-import { cardOf, lineOf } from "./core.js";
+import { cardOf, lineOf, createPicker } from "./core.js";
 
 // How many rows are kept, and how many show before the list scrolls.
 const KEEP = 20;
@@ -84,6 +87,13 @@ const timeOf = (at) => {
     : `${LABEL.months[d.getMonth()]} ${d.getDate()}`;
 };
 
+// What a click on a row does; picking a row from the keyboard does the same.
+const go = (n) => {
+  // Marked first: a click that fails must not leave the row new.
+  setShared(SEEN_KEY, Date.now());
+  if (n.action?.name) run(n.action.name, n.action.args ?? {});
+};
+
 export default class ToastHistory extends View {
   init(_props, cx) {
     const p = props() ?? {};
@@ -109,12 +119,19 @@ export default class ToastHistory extends View {
     cx.timer.every(1000, (cx) => {
       if (this.wasOpen && !this.isOpen()) cx.notify();
     });
+    // `pick`: numbers on the rows, and the keyboard picks one.
+    this.picker = createPicker(cx, log, go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
         cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
+        if (c === "pick") {
+          // The list opens to be picked from, and stays open like a click on the badge.
+          if (log().length > 0) this.pinned = true;
+          this.picker.pick();
+        }
       }
     });
   }
@@ -134,7 +151,7 @@ export default class ToastHistory extends View {
     setShared(SEEN_KEY, Date.now());
   }
 
-  row(t, n, isNew) {
+  row(t, n, isNew, i) {
     const kind = KIND[n.kind] ?? KIND.info;
     const tone = t[kind.tone] ?? t.accent;
     const edge = n.color ?? t.accent;
@@ -148,11 +165,9 @@ export default class ToastHistory extends View {
       .cursor_pointer()
       .when(isNew, (el) => el.bg(t.selection))
       .hover((s) => s.bg(t.hover))
-      .on_click(() => {
-        // Marked first: a click that fails must not leave the row new.
-        setShared(SEEN_KEY, Date.now());
-        if (n.action?.name) run(n.action.name, n.action.args ?? {});
-      })
+      .on_click(() => go(n))
+      // While picking: the number that picks this row.
+      .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(11).font_bold().text_color(t.background).child(String(i + 1))))
       .when(this.width >= NARROW, (el) =>
         el.child(div().flex_none().w(44).text_size(11).text_color(t.muted).child(timeOf(n.at))),
       )
@@ -219,7 +234,7 @@ export default class ToastHistory extends View {
           .max_h(SHOW * ROW)
           .min_h(0)
           .overflow_y_scroll()
-          .children(rows.map((n) => this.row(t, n, n.at > since))),
+          .children(rows.map((n, i) => this.row(t, n, n.at > since, i))),
       );
   }
 
@@ -252,7 +267,7 @@ export default class ToastHistory extends View {
     if (rows.length === 0) return div();
     const t = theme();
     const since = seen();
-    const board = v_flex().id("toast-history");
+    const board = v_flex().id("toast-history").track_focus(this.picker.handle).on_key_down(this.picker.key);
     return (this.mono ? board.font_family(this.mono) : board).child(
       this.wasOpen ? this.list(t, rows, since) : this.badge(t, rows.filter((n) => n.at > since).length),
     );

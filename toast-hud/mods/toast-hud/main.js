@@ -14,11 +14,13 @@
 //
 // core.js tells the agent and the kind and keeps the queue; this file draws.
 // `herdr-app do toast-hud.demo` posts three sample cards.
+// `herdr-app do toast-hud.pick` (bind it to a key in keys.json) numbers the
+// cards and opens one from the keyboard; see createPicker in core.js.
 
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { props, closeOverlay, run, fonts, notify, nextCommand } from "herdr";
-import { cardOf, lineOf, createQueue } from "./core.js";
+import { cardOf, lineOf, createQueue, createPicker } from "./core.js";
 
 const KEEP = 3;
 const DEFAULT_MS = 10000;
@@ -67,6 +69,12 @@ const DEMO = [
 
 const queue = createQueue("toast-hud.queue", KEEP);
 
+// What a click on a card does; picking a card from the keyboard does the same.
+const go = (n) => {
+  if (n.action?.name) run(n.action.name, n.action.args ?? {});
+  queue.remove(n.id);
+};
+
 export default class ToastHud extends View {
   init(_props, cx) {
     const p = props() ?? {};
@@ -82,17 +90,20 @@ export default class ToastHud extends View {
     this.mono = MONO.find((f) => installed.includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => queue.prune());
+    // `pick`: numbers on the cards, and the keyboard picks one.
+    this.picker = createPicker(cx, queue.cards, go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
         cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
+        if (c === "pick") this.picker.pick();
       }
     });
   }
 
-  card(n) {
+  card(n, i) {
     const kind = KIND[n.kind] ?? KIND.info;
     const edge = n.color ?? SCREEN.text;
     const line = lineOf(n);
@@ -106,10 +117,7 @@ export default class ToastHud extends View {
       .bg(SCREEN.panel)
       .cursor_pointer()
       .hover((s) => s.bg(SCREEN.hover))
-      .on_click(() => {
-        if (n.action?.name) run(n.action.name, n.action.args ?? {});
-        queue.remove(n.id);
-      })
+      .on_click(() => go(n))
       .child(corner().top(0).left(0).border_t(2).border_l(2))
       .child(corner().bottom(0).right(0).border_b(2).border_r(2))
       .child(
@@ -122,6 +130,8 @@ export default class ToastHud extends View {
               .gap(6)
               .items_center()
               .overflow_hidden()
+              // While picking: the number that opens this card.
+              .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(4).bg(edge).text_size(12).font_bold().text_color(SCREEN.panel).child(String(i + 1))))
               .child(text("[", SCREEN.text))
               .child(div().flex_shrink(1).min_w(0).max_w(this.width * 0.4).truncate().text_size(12).font_bold().text_color(edge).child((n.name ?? LABEL.fallback).toUpperCase()))
               .child(text("]", SCREEN.text))
@@ -143,7 +153,7 @@ export default class ToastHud extends View {
     if (this.isToast) return div();
     const cards = queue.cards();
     if (cards.length === 0) return div();
-    const board = v_flex().id("toast-hud").gap(6);
-    return (this.mono ? board.font_family(this.mono) : board).children(cards.map((n) => this.card(n)));
+    const board = v_flex().id("toast-hud").gap(6).track_focus(this.picker.handle).on_key_down(this.picker.key);
+    return (this.mono ? board.font_family(this.mono) : board).children(cards.map((n, i) => this.card(n, i)));
   }
 }

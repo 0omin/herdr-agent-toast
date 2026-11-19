@@ -5,7 +5,7 @@
 // In the repo, edit shared/core.js and run scripts/sync-core.sh; the core.js
 // in each mod folder is a copy.
 
-import { shared, setShared, agents } from "herdr";
+import { shared, setShared, agents, focused, run } from "herdr";
 
 // Agents with a color each. Icons ship with Herdr (icons/*.svg); tint: a
 // one-color glyph, drawn in the agent color. `names`: Herdr's program key, the
@@ -128,4 +128,53 @@ export function createQueue(key, max) {
       if (l.length !== q.length) setShared(key, l);
     },
   };
+}
+
+// Picking a card from the keyboard. The mod's `pick` command (bound to a key
+// in keys.json) puts a number on each card and takes the keyboard: a digit
+// opens that card, the pick key again or Enter opens the top one, and any
+// other key gives the keyboard back to the terminal it came from. Chords with
+// cmd, ctrl or alt are let through, so the pick key itself still works.
+// `list()`: the cards on screen, top first. `open(card)`: what a click does.
+// The mod draws the numbers while `on`, and puts `handle` and `key` on the
+// element that holds the cards: .track_focus(p.handle).on_key_down(p.key).
+export function createPicker(cx, list, open) {
+  const handle = cx.focus_handle();
+  let back = null;
+  const choose = (n) => {
+    picker.on = false;
+    if (n) open(n);
+    // A card's action (agent.focus) moves the keyboard itself.
+    if (!n?.action?.name && back) run("pane.focus", { terminal: back });
+  };
+  const picker = {
+    on: false,
+    handle,
+    pick() {
+      const cards = list();
+      if (picker.on) return choose(cards[0]);
+      if (cards.length === 0) return;
+      back = focused()?.terminal ?? null;
+      picker.on = true;
+      handle.focus();
+    },
+    key(e, cx) {
+      const m = e.modifiers ?? {};
+      if (!picker.on || m.platform || m.control || m.alt) return;
+      const cards = list();
+      if (/^[1-9]$/.test(e.keystroke)) choose(cards[Number(e.keystroke) - 1]);
+      else if (e.keystroke === "enter") choose(cards[0]);
+      else choose(null);
+      cx.stop_propagation();
+      cx.notify();
+    },
+  };
+  // A click elsewhere took the keyboard: the numbers go.
+  cx.timer.every(1000, (cx) => {
+    if (picker.on && !handle.is_focused()) {
+      picker.on = false;
+      cx.notify();
+    }
+  });
+  return picker;
 }

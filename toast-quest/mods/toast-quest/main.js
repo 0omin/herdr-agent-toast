@@ -13,11 +13,13 @@
 //
 // core.js tells the agent and the kind and keeps the queue; this file draws
 // and keeps the XP. `herdr-app do toast-quest.demo` posts three sample cards.
+// `herdr-app do toast-quest.pick` (bind it to a key in keys.json) numbers the
+// cards and opens one from the keyboard; see createPicker in core.js.
 
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { props, closeOverlay, run, theme, fonts, notify, nextCommand, shared, setShared } from "herdr";
-import { cardOf, lineOf, createQueue } from "./core.js";
+import { cardOf, lineOf, createQueue, createPicker } from "./core.js";
 
 const KEEP = 3;
 const DEFAULT_MS = 10000;
@@ -69,6 +71,12 @@ const DEMO = [
 ];
 
 const queue = createQueue("toast-quest.queue", KEEP);
+
+// What a click on a card does; picking a card from the keyboard does the same.
+const go = (n) => {
+  if (n.action?.name) run(n.action.name, n.action.args ?? {});
+  queue.remove(n.id);
+};
 const totalXp = () => Math.max(0, Number(shared(XP_KEY)) || 0);
 
 export default class ToastQuest extends View {
@@ -93,17 +101,20 @@ export default class ToastQuest extends View {
     this.mono = MONO.find((f) => installed.includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => queue.prune());
+    // `pick`: numbers on the cards, and the keyboard picks one.
+    this.picker = createPicker(cx, queue.cards, go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
         cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
+        if (c === "pick") this.picker.pick();
       }
     });
   }
 
-  card(t, n) {
+  card(t, n, i) {
     const kind = KIND[n.kind] ?? KIND.info;
     const tone = t[kind.tone] ?? t.accent;
     const edge = n.color ?? t.accent;
@@ -128,10 +139,9 @@ export default class ToastQuest extends View {
       .border_color(edge)
       .cursor_pointer()
       .hover((s) => s.bg(t.selection))
-      .on_click(() => {
-        if (n.action?.name) run(n.action.name, n.action.args ?? {});
-        queue.remove(n.id);
-      })
+      .on_click(() => go(n))
+      // While picking: the number that opens this card.
+      .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(13).font_bold().text_color(t.background).child(String(i + 1))))
       .child(kind.glyph.length > 1 ? glyph.frames(kind.glyph, kind.ms) : glyph.child(kind.glyph[0]))
       .child(
         v_flex()
@@ -180,7 +190,7 @@ export default class ToastQuest extends View {
     const cards = queue.cards();
     if (cards.length === 0) return div();
     const t = theme();
-    const board = v_flex().id("toast-quest").gap(4);
-    return (this.mono ? board.font_family(this.mono) : board).children(cards.map((n) => this.card(t, n)));
+    const board = v_flex().id("toast-quest").gap(4).track_focus(this.picker.handle).on_key_down(this.picker.key);
+    return (this.mono ? board.font_family(this.mono) : board).children(cards.map((n, i) => this.card(t, n, i)));
   }
 }
