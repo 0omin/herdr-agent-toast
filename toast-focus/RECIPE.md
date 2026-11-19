@@ -26,7 +26,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   - The agents that finished, newest first, 3 at the most, in `muted`: `Codex, Claude`.
   - `+1 more` in `muted`: how many warnings and notices came in.
     With nothing finished it reads `1 more`.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name and icon for them, framed in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
@@ -86,8 +86,8 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   It stays until you click it or that agent posts again.
 - A notification's own `timeout` is not used: cards stay, and counted notifications never show.
 - Cards and counts outlive a switch to another example: come back to this one and the old ones show again until clicked.
-- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
-- Tested with Herdr app 0.1.15 on macOS.
+- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

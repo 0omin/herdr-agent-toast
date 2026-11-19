@@ -28,7 +28,7 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 - The badge: 22 px high, rounded 6, theme `background`, `selection` on hover.
   `≡` in `muted`, then the number of new rows, 11 px bold, in a pill in the theme `blocked` color.
   With no new rows it is just `≡`.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name and icon for them, in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
@@ -96,8 +96,8 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 - The titles and bodies of the last 20 notifications are in Herdr's shared state file on disk until `clear` is clicked.
   Taking the mod out does not remove them.
 - Rows outlive a switch to another example: come back to this one and they are still listed.
-- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
-- Tested with Herdr app 0.1.15 on macOS.
+- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

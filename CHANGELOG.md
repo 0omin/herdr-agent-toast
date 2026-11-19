@@ -7,6 +7,14 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v1.1.0
+
+- Add two agents that Herdr app 0.1.16 knows: goose `#2EC4B6` and oh-my-pi `#A3E635`. Their icons come with Herdr app 0.1.16.
+  On a light theme oh-my-pi is faint, like Cursor and Antigravity.
+- `toast-agent` takes a card width from its floating block (`"props": { "width": 228 }`), like the other examples.
+- Tested with Herdr app 0.1.16. Earlier releases were tested with 0.1.15; this one was not.
+- Nothing in your setup needs to change.
+
 ## v1.0.0
 
 - First stable release. It marks the start of the promise below, not a change: nothing in your setup needs to change.

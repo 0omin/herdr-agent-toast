@@ -32,7 +32,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 
 - XP: every cleared quest adds 50 XP, and 500 XP make a level, starting at level 1.
   Each card shows the level and the bar of the moment it arrived.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name for them, framed in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
@@ -87,8 +87,8 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - Add the XP in the copy that receives the notification, not in the copy that draws, or it is counted on every redraw.
 - The shadow block comes before the card in the `relative` box, so the card is painted over it.
 - `☠`, `★` and the other glyphs are not in every monospace font; Herdr falls back to another installed font for them.
-- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
-- Tested with Herdr app 0.1.15 on macOS.
+- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

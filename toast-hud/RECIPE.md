@@ -22,7 +22,7 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
     With no title and no body there is no line two.
   - A done card adds a third line: `▮▮▮▮▮▮▮▮▮▮ 100%` in dim green `#5F8A3F`.
 - Status codes: needs you `AWAITING INPUT` (`#FF6188`), done `COMPLETE` (`#A9DC76`), error `FAULT` (`#FF6188`), warning `CAUTION` (`#FFD866`), notice `NOTICE` (`#78DCE8`).
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name for them, with green brackets.
   Non-agent notifications show `HERDR`.
 - No icons: the name in the heading says who it is.
@@ -78,7 +78,7 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
 - Float the mod once.
   In testing, with two floating blocks of `toast-hud`, one `demo` posted its three samples twice.
 - The panels stay black on a light theme on purpose; they do not follow the theme.
-- Tested with Herdr app 0.1.15 on macOS.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 

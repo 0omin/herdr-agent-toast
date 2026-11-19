@@ -21,7 +21,10 @@ import { cardOf, lineOf, createQueue } from "./core.js";
 
 const KEEP = 3;
 const DEFAULT_MS = 10000;
+// Card width in px. A floating block can set its own, for a narrow spot such
+// as a sidebar: "content": { "mod": "toast-agent", "props": { "width": 228 } }.
 const WIDTH = 360;
+const MIN_WIDTH = 180;
 const MONO = ["JetBrains Mono", "SF Mono", "Menlo", "Cascadia Mono", "Consolas", "DejaVu Sans Mono"];
 
 // Words on the cards. Change them here.
@@ -65,6 +68,8 @@ export default class ToastAgent extends View {
       closeOverlay(p.overlay);
       return;
     }
+    const w = Number(p.width);
+    this.width = Number.isFinite(w) && w > 0 ? Math.max(w, MIN_WIDTH) : WIDTH;
     const installed = fonts();
     this.mono = MONO.find((f) => installed.includes(f)) ?? null;
     // Drop expired cards once a second, only when something expired.
@@ -88,7 +93,7 @@ export default class ToastAgent extends View {
 
     return h_flex()
       .id(`toast-agent-${n.id}`)
-      .w(WIDTH)
+      .w(this.width)
       .px(12)
       .py(8)
       .gap(10)

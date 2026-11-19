@@ -24,6 +24,8 @@ export const AGENTS = [
   { key: "kimi", name: "Kimi", color: "#1783FF", icon: "icons/kimi.svg", tint: false, names: ["kimi", "kimi-code", "kimicodecli"] },
   { key: "crush", name: "Crush", color: "#FF6DAA", icon: "icons/crush.svg", tint: false, names: ["crush"] },
   { key: "antigravity", name: "Antigravity", color: "#FFE432", icon: "icons/antigravity.svg", tint: false, names: ["antigravity", "agy"] },
+  { key: "goose", name: "goose", color: "#2EC4B6", icon: "icons/goose.svg", tint: true, names: ["goose"] },
+  { key: "omp", name: "oh-my-pi", color: "#A3E635", icon: "icons/omp.svg", tint: true, names: ["omp", "oh-my-pi"] },
 ];
 
 // Herdr's own notifications are titled "<Program> needs you" / "<Program> finished".

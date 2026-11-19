@@ -26,7 +26,7 @@ Of the examples in this repo it covers the least screen.
   The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent, or just the agent's name.
 - Pills differ in width, so they line up on the side the block sits on: left on the left edge, right on the right edge, and by `align` (`start`, `center`, `end`) on the top and bottom edges.
   The column has 5 px on each side, the same as Herdr's frame leaves above and below.
-- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`.
+- Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name and icon for them, in the theme `accent`.
   Non-agent notifications show `Herdr`.
 - The app font (`ui_font` in Herdr's settings); no monospace font is picked.
@@ -82,8 +82,8 @@ Of the examples in this repo it covers the least screen.
 - Herdr draws its own frame around a floating block, so the pills sit inside that frame, not straight on the terminals.
 - Do not blink the dot with a timer: every redraw of a mod redraws the whole window.
 - A needs-you pill leaves after 5 s like the others.
-- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity) are faint.
-- Tested with Herdr app 0.1.15 on macOS.
+- Agent colors are fixed hex values; on a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint.
+- Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
 
 ## Done when
 
