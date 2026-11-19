@@ -58,6 +58,10 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - The cards and the counts are in shared state, so they are still there after Herdr restarts.
 - `herdr-app do toast-focus.demo` posts three sample notifications: a Claude needs-you card, a Gemini error card, and one finished Codex task on the chip.
   The sample cards stay like any other, so running it again adds to what is there; click them away.
+- `herdr-app do toast-focus.pick` numbers the cards (1 to 9) and takes the keyboard:
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-focus.pick" }`.
 
 ## Built from
 
@@ -67,9 +71,9 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
     A copy with `overlay` and a string `title` either adds a card to `shared("toast-focus.queue")` (newest first, 3 kept, `until: 0` so it never expires) or updates `shared("toast-focus.quiet")` = `{ done, more, names }`, and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-focus", "content": { "mod": "toast-focus" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue and the chip, and waits on `nextCommand()` for `demo`.
+    That copy draws the queue and the chip, and waits on `nextCommand()` for `demo` and `pick`.
     It needs no timer: `setShared` redraws every mod, and nothing here expires.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - Icons are Herdr's own `icons/*.svg`; none ship with the mod.
   No network, no `exec`, no files read or written.
@@ -97,3 +101,5 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 4. A minute later the two cards are still there.
 5. Clicking a card removes it; clicking the chip hides it; with both cards and the chip gone the block hides.
 6. An agent that finishes while you look elsewhere shows no card: the chip's count goes up by one and names the agent.
+7. With `"cmd-j": "toast-focus.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1 and 2 on the demo cards.
+   Escape takes the numbers away and the keyboard goes back to the terminal.

@@ -60,6 +60,10 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   Cards also leave after their timeout (default 10 s).
 - Expired cards never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-quest.demo` posts three sample cards: Claude boss, Codex quest clear, Gemini game over.
+- `herdr-app do toast-quest.pick` numbers the cards (1 to 9) and takes the keyboard:
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-quest.pick" }`.
 
 ## Built from
 
@@ -70,9 +74,9 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
     A copy with `overlay` and a string `title` adds a card to `shared("toast-quest.queue")` (newest first, 3 kept), adds 50 to `shared("toast-quest.xp")` for a cleared quest, and closes itself with `closeOverlay`.
     The card carries the XP total, so the board never has to look it up.
   - A floating block on the node that holds the terminals: `{ "id": "toast-quest", "content": { "mod": "toast-quest" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
+    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
 - The shadow: each card sits in a `relative` box 4 px wider and taller, with an `absolute` block behind it at `top` 4, `left` 4.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - No icons, no network, no `exec`, no files read or written.
 
@@ -96,3 +100,5 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 2. `herdr-app status` shows no errors and lists `toast-quest` under `floats`.
 3. `herdr-app do toast-quest.demo` shows three cards top right: Claude (orange frame, `BOSS APPEARED!`), Codex (blue frame, `QUEST CLEAR!`, `+50 XP`), Gemini (purple frame, `GAME OVER`).
 4. Running the demo again lights one more bar segment on the Codex card; at 500 XP the bar empties and `LV` goes up.
+5. With `"cmd-j": "toast-quest.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo cards.
+   Escape takes the numbers away and the keyboard goes back to the terminal.

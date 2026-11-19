@@ -60,6 +60,11 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 - Click `clear`: every row goes, and the block hides until the next notification.
 - The rows are in shared state, so they are still there after Herdr restarts.
 - `herdr-app do toast-history.demo` posts three sample notifications: Claude needs you, Codex finished, a Gemini error.
+- `herdr-app do toast-history.pick` opens the list, numbers the rows (1 to 9) and takes the keyboard:
+  a digit goes to that row's agent as a click would, `pick` again or Enter to the top row; any other key gives the keyboard back to the terminal it came from.
+  The list stays open, as after a click on the badge.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-history.pick" }`.
 
 ## Built from
 
@@ -70,13 +75,13 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
     A copy with `overlay` and a string `title` puts a row first in `shared("toast-history.log")` (20 kept, each with the time it came, `at`), moves `shared("toast-history.peek")` (the time until which the list stays open) forward, and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-history", "content": { "mod": "toast-history" }, "edge": "top", "align": "end" }`.
     That copy draws the list while it is opened by a click, or `peek` is ahead, or the pointer is still on an open list (`placement().hovered`); otherwise the badge.
-    It waits on `nextCommand()` for `demo`.
+    It waits on `nextCommand()` for `demo` and `pick`.
 - `shared("toast-history.seen")`: the time of the last fold or row click.
   A row is new when its `at` is later.
 - Whether the list was opened by a click is kept in the view, not in shared state: after a restart the list is folded.
 - A 1 s timer looks whether it is time to fold, and redraws only then.
 - The rows scroll with `.max_h(8 * 26).min_h(0).overflow_y_scroll()`.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `fonts`, `notify`, `nextCommand`, `placement`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `theme`, `fonts`, `notify`, `nextCommand`, `placement`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
   Its card queue is not used here: a queue lets a card go when its time is up, and a history keeps it.
 - Icons are Herdr's own `icons/*.svg`; none ship with the mod.
@@ -108,3 +113,5 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 5. Clicking the badge opens the list; clicking the heading folds it, and the badge reads `≡`.
 6. Clicking `clear` hides the block.
 7. An agent that finishes adds a row and opens the list for 10 s; clicking its row goes to that agent.
+8. With `"cmd-j": "toast-history.pick"` in the `global` section of `keys.json`, cmd-j after the demo opens the list and puts 1, 2 and 3 on the demo rows.
+   Escape takes the numbers away and the keyboard goes back to the terminal.
