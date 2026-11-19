@@ -50,7 +50,7 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
 - Expired cards never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-hud.demo` posts three sample cards: Claude `AWAITING INPUT`, Codex `COMPLETE`, Gemini `FAULT`.
 - `herdr-app do toast-hud.pick` numbers the cards (1 to 9) and takes the keyboard:
-  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
   A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-hud.pick" }`.
 
@@ -93,4 +93,4 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
 4. An agent that finishes while you look elsewhere shows a `COMPLETE` card with its color; clicking it goes to that agent.
 5. After 10 s untouched, cards disappear and the block hides.
 6. With `"cmd-j": "toast-hud.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo cards.
-   Escape takes the numbers away and the keyboard goes back to the terminal.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

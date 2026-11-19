@@ -37,7 +37,8 @@ Each example lives in its own folder with a `RECIPE.md` (what it does and how it
 ## Keyboard
 
 Every example has a `pick` command: it numbers the cards and takes the keyboard, and a digit opens that card.
-Enter, or the same key again, opens the top one; any other key gives the keyboard back to your terminal.
+Enter opens the top one, and so does the same key again when it has cmd, ctrl or alt in it.
+Any other key gives the keyboard back to the pane it came from.
 Bind it to a key in the `global` section of `~/.config/herdr-app/keys.json`, for example `"cmd-j": "toast-agent.pick"`.
 
 ## Develop

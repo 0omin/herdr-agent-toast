@@ -119,8 +119,9 @@ export default class ToastHistory extends View {
     cx.timer.every(1000, (cx) => {
       if (this.wasOpen && !this.isOpen()) cx.notify();
     });
-    // `pick`: numbers on the rows, and the keyboard picks one.
-    this.picker = createPicker(cx, log, go);
+    // `pick`: numbers on the rows that show without scrolling, and the
+    // keyboard picks one.
+    this.picker = createPicker(cx, () => log().slice(0, SHOW), go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
@@ -167,7 +168,7 @@ export default class ToastHistory extends View {
       .hover((s) => s.bg(t.hover))
       .on_click(() => go(n))
       // While picking: the number that picks this row.
-      .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(11).font_bold().text_color(t.background).child(String(i + 1))))
+      .when(this.picker.on && i < SHOW, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(11).font_bold().text_color(t.background).child(String(i + 1))))
       .when(this.width >= NARROW, (el) =>
         el.child(div().flex_none().w(44).text_size(11).text_color(t.muted).child(timeOf(n.at))),
       )

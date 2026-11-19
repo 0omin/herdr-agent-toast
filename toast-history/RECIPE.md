@@ -60,8 +60,8 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 - Click `clear`: every row goes, and the block hides until the next notification.
 - The rows are in shared state, so they are still there after Herdr restarts.
 - `herdr-app do toast-history.demo` posts three sample notifications: Claude needs you, Codex finished, a Gemini error.
-- `herdr-app do toast-history.pick` opens the list, numbers the rows (1 to 9) and takes the keyboard:
-  a digit goes to that row's agent as a click would, `pick` again or Enter to the top row; any other key gives the keyboard back to the terminal it came from.
+- `herdr-app do toast-history.pick` opens the list, numbers the rows that show without scrolling (1 to 8) and takes the keyboard:
+  a digit goes to that row's agent as a click would, `pick` again or Enter to the top row; any other key gives the keyboard back to the pane it came from.
   The list stays open, as after a click on the badge.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
   A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-history.pick" }`.
@@ -114,4 +114,4 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
 6. Clicking `clear` hides the block.
 7. An agent that finishes adds a row and opens the list for 10 s; clicking its row goes to that agent.
 8. With `"cmd-j": "toast-history.pick"` in the `global` section of `keys.json`, cmd-j after the demo opens the list and puts 1, 2 and 3 on the demo rows.
-   Escape takes the numbers away and the keyboard goes back to the terminal.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

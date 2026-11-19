@@ -59,7 +59,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - `herdr-app do toast-focus.demo` posts three sample notifications: a Claude needs-you card, a Gemini error card, and one finished Codex task on the chip.
   The sample cards stay like any other, so running it again adds to what is there; click them away.
 - `herdr-app do toast-focus.pick` numbers the cards (1 to 9) and takes the keyboard:
-  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
   A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-focus.pick" }`.
 
@@ -102,4 +102,4 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 5. Clicking a card removes it; clicking the chip hides it; with both cards and the chip gone the block hides.
 6. An agent that finishes while you look elsewhere shows no card: the chip's count goes up by one and names the agent.
 7. With `"cmd-j": "toast-focus.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1 and 2 on the demo cards.
-   Escape takes the numbers away and the keyboard goes back to the terminal.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

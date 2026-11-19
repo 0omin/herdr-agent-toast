@@ -133,19 +133,24 @@ export function createQueue(key, max) {
 // Picking a card from the keyboard. The mod's `pick` command (bound to a key
 // in keys.json) puts a number on each card and takes the keyboard: a digit
 // opens that card, the pick key again or Enter opens the top one, and any
-// other key gives the keyboard back to the terminal it came from. Chords with
-// cmd, ctrl or alt are let through, so the pick key itself still works.
+// other key gives the keyboard back to the pane it came from. Opening a card
+// gives it back too, before the card's action runs (Herdr's agent.focus then
+// moves it to the agent). Chords with cmd, ctrl or alt are let through, so the
+// pick key itself still works.
 // `list()`: the cards on screen, top first. `open(card)`: what a click does.
 // The mod draws the numbers while `on`, and puts `handle` and `key` on the
 // element that holds the cards: .track_focus(p.handle).on_key_down(p.key).
 export function createPicker(cx, list, open) {
   const handle = cx.focus_handle();
   let back = null;
-  const choose = (n) => {
+  const giveBack = () => {
     picker.on = false;
+    if (back?.terminal) run("pane.focus", { terminal: back.terminal });
+    else if (back?.pane) run("pane.focus", { pane: back.pane });
+  };
+  const choose = (n) => {
+    giveBack();
     if (n) open(n);
-    // A card's action (agent.focus) moves the keyboard itself.
-    if (!n?.action?.name && back) run("pane.focus", { terminal: back });
   };
   const picker = {
     on: false,
@@ -154,7 +159,8 @@ export function createPicker(cx, list, open) {
       const cards = list();
       if (picker.on) return choose(cards[0]);
       if (cards.length === 0) return;
-      back = focused()?.terminal ?? null;
+      const f = focused();
+      back = f ? { terminal: f.terminal, pane: f.pane } : null;
       picker.on = true;
       handle.focus();
     },
@@ -169,12 +175,14 @@ export function createPicker(cx, list, open) {
       cx.notify();
     },
   };
-  // A click elsewhere took the keyboard: the numbers go.
+  // Every card has gone (its time was up): the keyboard goes back. A click
+  // elsewhere took the keyboard: only the numbers go.
   cx.timer.every(1000, (cx) => {
-    if (picker.on && !handle.is_focused()) {
-      picker.on = false;
-      cx.notify();
-    }
+    if (!picker.on) return;
+    if (list().length === 0) giveBack();
+    else if (!handle.is_focused()) picker.on = false;
+    else return;
+    cx.notify();
   });
   return picker;
 }

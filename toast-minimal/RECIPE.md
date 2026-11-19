@@ -54,7 +54,7 @@ Of the examples in this repo it covers the least screen.
 - Expired pills never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-minimal.demo` posts three sample pills: Claude needs you, Codex is done, Gemini hit an error.
 - `herdr-app do toast-minimal.pick` numbers the pills (1 to 9) and takes the keyboard:
-  a digit opens that pill as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  a digit opens that pill as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
   A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-minimal.pick" }`.
 
@@ -97,4 +97,4 @@ Of the examples in this repo it covers the least screen.
 4. Pointing at the Claude pill adds `Approve edit to app.ts`; moving away takes it out again.
 5. After 5 s untouched, the pills disappear and the block hides.
 6. With `"cmd-j": "toast-minimal.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo pills.
-   Escape takes the numbers away and the keyboard goes back to the terminal.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

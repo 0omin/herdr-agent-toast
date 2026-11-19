@@ -61,7 +61,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - Expired cards never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-quest.demo` posts three sample cards: Claude boss, Codex quest clear, Gemini game over.
 - `herdr-app do toast-quest.pick` numbers the cards (1 to 9) and takes the keyboard:
-  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the terminal it came from.
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
   A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-quest.pick" }`.
 
@@ -101,4 +101,4 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 3. `herdr-app do toast-quest.demo` shows three cards top right: Claude (orange frame, `BOSS APPEARED!`), Codex (blue frame, `QUEST CLEAR!`, `+50 XP`), Gemini (purple frame, `GAME OVER`).
 4. Running the demo again lights one more bar segment on the Codex card; at 500 XP the bar empties and `LV` goes up.
 5. With `"cmd-j": "toast-quest.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo cards.
-   Escape takes the numbers away and the keyboard goes back to the terminal.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.
