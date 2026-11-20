@@ -110,7 +110,7 @@ export default class ToastMinimal extends View {
         else if (this.open === n.id) this.open = null;
         cx.notify();
       })
-      .on_click(() => go(n))
+      .on_click(() => this.picker.click(n))
       // While picking: the number that opens this pill.
       .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).rounded_full().bg(edge).text_size(12).font_bold().text_color(t.background).child(String(i + 1))))
       .child(

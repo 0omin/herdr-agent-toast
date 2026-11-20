@@ -166,7 +166,7 @@ export default class ToastHistory extends View {
       .cursor_pointer()
       .when(isNew, (el) => el.bg(t.selection))
       .hover((s) => s.bg(t.hover))
-      .on_click(() => go(n))
+      .on_click(() => this.picker.click(n))
       // While picking: the number that picks this row.
       .when(this.picker.on && i < SHOW, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(11).font_bold().text_color(t.background).child(String(i + 1))))
       .when(this.width >= NARROW, (el) =>

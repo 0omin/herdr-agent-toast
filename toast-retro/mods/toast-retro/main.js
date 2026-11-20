@@ -158,7 +158,7 @@ export default class ToastRetro extends View {
     const name = n.name ?? LABEL.fallback;
     const line = lineOf(n);
     const gone = () => queue.remove(n.id);
-    const open = n.action?.name ? () => go(n) : null;
+    const open = n.action?.name ? () => this.picker.click(n) : null;
 
     const bar = h_flex()
       .relative()

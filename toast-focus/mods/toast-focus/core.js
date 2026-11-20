@@ -140,6 +140,8 @@ export function createQueue(key, max) {
 // `list()`: the cards on screen, top first. `open(card)`: what a click does.
 // The mod draws the numbers while `on`, and puts `handle` and `key` on the
 // element that holds the cards: .track_focus(p.handle).on_key_down(p.key).
+// A card's click calls `click(card)`: while picking it is a pick (the keyboard
+// goes back first), otherwise it is `open(card)`.
 export function createPicker(cx, list, open) {
   const handle = cx.focus_handle();
   let back = null;
@@ -155,6 +157,10 @@ export function createPicker(cx, list, open) {
   const picker = {
     on: false,
     handle,
+    click(n) {
+      if (picker.on) choose(n);
+      else open(n);
+    },
     pick() {
       const cards = list();
       if (picker.on) return choose(cards[0]);

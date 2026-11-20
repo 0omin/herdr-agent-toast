@@ -136,7 +136,7 @@ export default class ToastFocus extends View {
       .border_color(edge)
       .cursor_pointer()
       .hover((s) => s.bg(t.selection))
-      .on_click(() => go(n))
+      .on_click(() => this.picker.click(n))
       // While picking: the number that opens this card.
       .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).bg(edge).text_size(13).font_bold().text_color(t.background).child(String(i + 1))))
       .child(

@@ -117,7 +117,7 @@ export default class ToastHud extends View {
       .bg(SCREEN.panel)
       .cursor_pointer()
       .hover((s) => s.bg(SCREEN.hover))
-      .on_click(() => go(n))
+      .on_click(() => this.picker.click(n))
       .child(corner().top(0).left(0).border_t(2).border_l(2))
       .child(corner().bottom(0).right(0).border_b(2).border_r(2))
       .child(
