@@ -55,7 +55,7 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
 - `herdr-app do toast-retro.pick` numbers the boxes (1 to 9) and takes the keyboard:
   a digit does what that box's `Open` does (or `Dismiss`, when it has no `Open`), `pick` again or Enter does it for the top box; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
-  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-retro.pick" }`.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-retro.pick"`.
 
 ## Built from
 

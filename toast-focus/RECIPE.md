@@ -61,7 +61,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - `herdr-app do toast-focus.pick` numbers the cards (1 to 9) and takes the keyboard:
   a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
-  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-focus.pick" }`.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-focus.pick"`.
 
 ## Built from
 

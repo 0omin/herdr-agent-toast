@@ -64,7 +64,7 @@ Each row has the icon and the color of the agent that sent it (Claude, Codex, Ge
   a digit goes to that row's agent as a click would, `pick` again or Enter to the top row; any other key gives the keyboard back to the pane it came from.
   The list stays open, as after a click on the badge.
   Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
-  A click elsewhere ends it too. Bind it to a key in `keys.json` to use it: `"global": { "cmd-j": "toast-history.pick" }`.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-history.pick"`.
 
 ## Built from
 

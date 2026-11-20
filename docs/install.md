@@ -115,7 +115,7 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
   On a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint; change them in the `AGENTS` table in `core.js`.
 - To open cards from the keyboard, bind the example's `pick` command to a free key in the `global` section of `~/.config/herdr-app/keys.json`:
   ```json
-  "global": { "cmd-j": "toast-agent.pick" }
+  "cmd-j": "toast-agent.pick"
   ```
   The script does not touch `keys.json`.
   Herdr's own notes say an edited `keys.json` is kept as yours: new default keys from a Herdr upgrade are no longer added to it.
