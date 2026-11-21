@@ -14,6 +14,7 @@ Each mod's `main.js` starts with the version it was released in.
   - Past LV 50, each 5 levels are a step of metal trim, bronze to rainbow, and the XP bar takes the metal; past LV 200 the count starts again from LV 1 with a star.
   - 13 achievements, each shown once as a card of its own.
   - A level-up says `LEVEL UP!` and blinks the bar; a boss's glyph shakes.
+- Tested with Herdr app 0.1.16.
 - The XP stays in `toast-quest.xp`, as before; days, combos and achievements are kept in a new key, `toast-quest.stats`.
 - Nothing in your setup needs to change.
 
