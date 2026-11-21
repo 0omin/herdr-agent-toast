@@ -48,6 +48,10 @@ Its heading says what happened: the agent needs you, finished, or something went
   Cards also leave after their timeout (default 10 s).
 - Expired cards never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-agent.demo` posts three sample cards: Claude needs you, Codex done, Gemini error.
+- `herdr-app do toast-agent.pick` numbers the cards (1 to 9) and takes the keyboard:
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-agent.pick"`.
 
 ## Built from
 
@@ -57,8 +61,8 @@ Its heading says what happened: the agent needs you, finished, or something went
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
     A copy with `overlay` and a string `title` adds a card to `shared("toast-agent.queue")` (newest first, 3 kept) and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-agent", "content": { "mod": "toast-agent" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
+    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `theme`, `fonts`, `notify`, `nextCommand`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - Icons are Herdr's own `icons/*.svg`; none ship with the mod.
   No network, no `exec`, no files read or written.
@@ -82,3 +86,5 @@ Its heading says what happened: the agent needs you, finished, or something went
    The Claude sample uses level `error`, as Herdr does.
 4. An agent that finishes while you look elsewhere shows a Done card in its color; clicking it goes to that agent.
 5. After 10 s untouched, cards disappear and the block hides.
+6. With `"cmd-j": "toast-agent.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo cards.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

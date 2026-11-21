@@ -13,11 +13,13 @@
 //
 // core.js tells the agent and the kind and keeps the queue; this file draws.
 // `herdr-app do toast-minimal.demo` posts three sample pills.
+// `herdr-app do toast-minimal.pick` (bind it to a key in keys.json) numbers the
+// pills and opens one from the keyboard; see createPicker in core.js.
 
 import { View, div, image, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { props, closeOverlay, run, theme, notify, nextCommand, placement } from "herdr";
-import { cardOf, lineOf, createQueue } from "./core.js";
+import { cardOf, lineOf, createQueue, createPicker } from "./core.js";
 
 const KEEP = 3;
 const DEFAULT_MS = 5000;
@@ -51,6 +53,12 @@ const DEMO = [
 
 const queue = createQueue("toast-minimal.queue", KEEP);
 
+// What a click on a pill does; picking a pill from the keyboard does the same.
+const go = (n) => {
+  if (n.action?.name) run(n.action.name, n.action.args ?? {});
+  queue.remove(n.id);
+};
+
 export default class ToastMinimal extends View {
   init(_props, cx) {
     const p = props() ?? {};
@@ -66,17 +74,20 @@ export default class ToastMinimal extends View {
     this.open = null;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => queue.prune());
+    // `pick`: numbers on the pills, and the keyboard picks one.
+    this.picker = createPicker(cx, queue.cards, go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
         cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
+        if (c === "pick") this.picker.pick();
       }
     });
   }
 
-  pill(t, n) {
+  pill(t, n, i) {
     const tone = t[TONE[n.kind] ?? TONE.info] ?? t.accent;
     const edge = n.color ?? t.accent;
     const more = this.open === n.id ? lineOf(n) : "";
@@ -99,10 +110,9 @@ export default class ToastMinimal extends View {
         else if (this.open === n.id) this.open = null;
         cx.notify();
       })
-      .on_click(() => {
-        if (n.action?.name) run(n.action.name, n.action.args ?? {});
-        queue.remove(n.id);
-      })
+      .on_click(() => this.picker.click(n))
+      // While picking: the number that opens this pill.
+      .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(5).rounded_full().bg(edge).text_size(12).font_bold().text_color(t.background).child(String(i + 1))))
       .child(
         !n.icon
           ? div().size(18).flex_none().rounded_full().bg(edge)
@@ -127,9 +137,9 @@ export default class ToastMinimal extends View {
     const at = placement();
     const side = at?.edge === "left" ? "start" : at?.edge === "right" ? "end" : (at?.align ?? "end");
     // Herdr's frame leaves 5 px above and below; the same on the sides.
-    const column = v_flex().id("toast-minimal").px(5).gap(4);
+    const column = v_flex().id("toast-minimal").px(5).gap(4).track_focus(this.picker.handle).on_key_down(this.picker.key);
     return (side === "start" ? column.items_start() : side === "center" ? column.items_center() : column.items_end()).children(
-      cards.map((n) => this.pill(t, n)),
+      cards.map((n, i) => this.pill(t, n, i)),
     );
   }
 }

@@ -5,7 +5,7 @@
 // In the repo, edit shared/core.js and run scripts/sync-core.sh; the core.js
 // in each mod folder is a copy.
 
-import { shared, setShared, agents } from "herdr";
+import { shared, setShared, agents, focused, run } from "herdr";
 
 // Agents with a color each. Icons ship with Herdr (icons/*.svg); tint: a
 // one-color glyph, drawn in the agent color. `names`: Herdr's program key, the
@@ -128,4 +128,67 @@ export function createQueue(key, max) {
       if (l.length !== q.length) setShared(key, l);
     },
   };
+}
+
+// Picking a card from the keyboard. The mod's `pick` command (bound to a key
+// in keys.json) puts a number on each card and takes the keyboard: a digit
+// opens that card, the pick key again or Enter opens the top one, and any
+// other key gives the keyboard back to the pane it came from. Opening a card
+// gives it back too, before the card's action runs (Herdr's agent.focus then
+// moves it to the agent). Chords with cmd, ctrl or alt are let through, so the
+// pick key itself still works.
+// `list()`: the cards on screen, top first. `open(card)`: what a click does.
+// The mod draws the numbers while `on`, and puts `handle` and `key` on the
+// element that holds the cards: .track_focus(p.handle).on_key_down(p.key).
+// A card's click calls `click(card)`: while picking it is a pick (the keyboard
+// goes back first), otherwise it is `open(card)`.
+export function createPicker(cx, list, open) {
+  const handle = cx.focus_handle();
+  let back = null;
+  const giveBack = () => {
+    picker.on = false;
+    if (back?.terminal) run("pane.focus", { terminal: back.terminal });
+    else if (back?.pane) run("pane.focus", { pane: back.pane });
+  };
+  const choose = (n) => {
+    giveBack();
+    if (n) open(n);
+  };
+  const picker = {
+    on: false,
+    handle,
+    click(n) {
+      if (picker.on) choose(n);
+      else open(n);
+    },
+    pick() {
+      const cards = list();
+      if (picker.on) return choose(cards[0]);
+      if (cards.length === 0) return;
+      const f = focused();
+      back = f ? { terminal: f.terminal, pane: f.pane } : null;
+      picker.on = true;
+      handle.focus();
+    },
+    key(e, cx) {
+      const m = e.modifiers ?? {};
+      if (!picker.on || m.platform || m.control || m.alt) return;
+      const cards = list();
+      if (/^[1-9]$/.test(e.keystroke)) choose(cards[Number(e.keystroke) - 1]);
+      else if (e.keystroke === "enter") choose(cards[0]);
+      else choose(null);
+      cx.stop_propagation();
+      cx.notify();
+    },
+  };
+  // Every card has gone (its time was up): the keyboard goes back. A click
+  // elsewhere took the keyboard: only the numbers go.
+  cx.timer.every(1000, (cx) => {
+    if (!picker.on) return;
+    if (list().length === 0) giveBack();
+    else if (!handle.is_focused()) picker.on = false;
+    else return;
+    cx.notify();
+  });
+  return picker;
 }

@@ -7,6 +7,16 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v1.2.0
+
+- Every example has a `pick` command for the keyboard.
+  It numbers the cards (1 to 9) and takes the keyboard: a digit opens that card as a click would, Enter or `pick` again opens the top one, and any other key without cmd, ctrl or alt gives the keyboard back to the pane it came from.
+  `toast-history` opens its list first and numbers the 8 rows that show without scrolling; in `toast-retro` a number does what `Open` does, or `Dismiss` when there is no `Open`.
+- To use it, bind it to a key in the `global` section of `keys.json`, for example `"cmd-j": "toast-agent.pick"`.
+  `install.sh` does not do this for you.
+- `core.js` adds `createPicker`, the picking every example shares.
+- Nothing in your setup needs to change.
+
 ## v1.1.0
 
 - Add two agents that Herdr app 0.1.16 knows: goose `#2EC4B6` and oh-my-pi `#A3E635`. Their icons come with Herdr app 0.1.16.

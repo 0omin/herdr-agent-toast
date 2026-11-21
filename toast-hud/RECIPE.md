@@ -49,6 +49,10 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
   Cards also leave after their timeout (default 10 s).
 - Expired cards never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-hud.demo` posts three sample cards: Claude `AWAITING INPUT`, Codex `COMPLETE`, Gemini `FAULT`.
+- `herdr-app do toast-hud.pick` numbers the cards (1 to 9) and takes the keyboard:
+  a digit opens that card as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-hud.pick"`.
 
 ## Built from
 
@@ -58,11 +62,11 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
     A copy with `overlay` and a string `title` adds a card to `shared("toast-hud.queue")` (newest first, 3 kept) and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-hud", "content": { "mod": "toast-hud" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
+    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
 - The corner brackets are two 12 px `absolute` boxes with only two sides of a border: `border_t(2).border_l(2)` and `border_b(2).border_r(2)`.
 - The blinking cursor is `.frames(["█", " "], 500)`.
 - Capitals are made in JavaScript with `toUpperCase()`; the body keeps its own case.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `fonts`, `notify`, `nextCommand`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `fonts`, `notify`, `nextCommand`.
   No `theme()`: the screen colors are fixed.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - No network, no `exec`, no files read or written.
@@ -88,3 +92,5 @@ Corner brackets are in the color of the agent that sent it (Claude, Codex, Gemin
    `[ CLAUDE ] STATUS: AWAITING INPUT█` with orange brackets and a blinking cursor, `[ CODEX ] STATUS: COMPLETE` with blue brackets and the `100%` line, `[ GEMINI ] STATUS: FAULT` with purple brackets.
 4. An agent that finishes while you look elsewhere shows a `COMPLETE` card with its color; clicking it goes to that agent.
 5. After 10 s untouched, cards disappear and the block hides.
+6. With `"cmd-j": "toast-hud.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo cards.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

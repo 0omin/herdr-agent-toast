@@ -14,11 +14,14 @@
 //
 // core.js tells the agent and the kind and keeps the queue; this file draws.
 // `herdr-app do toast-retro.demo` posts three sample notifications; two show.
+// `herdr-app do toast-retro.pick` (bind it to a key in keys.json) numbers the
+// boxes; a number does what Open does, or Dismiss when there is no Open. See
+// createPicker in core.js.
 
 import { View, div, PathBuilder, Background } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { props, closeOverlay, run, notify, nextCommand } from "herdr";
-import { cardOf, lineOf, createQueue } from "./core.js";
+import { cardOf, lineOf, createQueue, createPicker } from "./core.js";
 
 // Dialog boxes are big, so only the newest two show.
 const KEEP = 2;
@@ -72,6 +75,13 @@ const DEMO = [
 
 const queue = createQueue("toast-retro.queue", KEEP);
 
+// Open: go to the agent and close the box. Picking a box from the keyboard
+// does the same, and only closes a box that has no Open.
+const go = (n) => {
+  if (n.action?.name) run(n.action.name, n.action.args ?? {});
+  queue.remove(n.id);
+};
+
 // A full-size layer of `paint` in the shape of `points` (corners in %).
 const shape = (points, paint) => {
   const [first, ...rest] = points;
@@ -104,12 +114,15 @@ export default class ToastRetro extends View {
     this.width = Number.isFinite(w) && w > 0 ? Math.max(w, MIN_WIDTH) : WIDTH;
     // Drop expired cards once a second, only when something expired.
     cx.timer.every(1000, () => queue.prune());
+    // `pick`: numbers on the boxes, and the keyboard picks one.
+    this.picker = createPicker(cx, queue.cards, go);
     // cx.notify() also ends this loop when a newer build of the file replaces it.
     cx.spawn(async (cx) => {
       for (;;) {
         const c = await nextCommand();
         cx.notify();
         if (c === "demo") for (const n of [...DEMO].reverse()) notify(n);
+        if (c === "pick") this.picker.pick();
       }
     });
   }
@@ -140,17 +153,12 @@ export default class ToastRetro extends View {
     return box.rounded_full().bg(kind.fill).border_2().border_color(kind.ink === DESK.title ? kind.fill : kind.ink).child(mark);
   }
 
-  card(n) {
+  card(n, i) {
     const kind = KIND[n.kind] ?? KIND.info;
     const name = n.name ?? LABEL.fallback;
     const line = lineOf(n);
     const gone = () => queue.remove(n.id);
-    const go = n.action?.name
-      ? () => {
-          run(n.action.name, n.action.args ?? {});
-          gone();
-        }
-      : null;
+    const open = n.action?.name ? () => this.picker.click(n) : null;
 
     const bar = h_flex()
       .relative()
@@ -160,6 +168,8 @@ export default class ToastRetro extends View {
       .gap(6)
       .items_center()
       .child(shape(RECT, Background.linear_gradient(90, n.color ?? DESK.plain, DESK.fade)))
+      // While picking: the number that picks this box.
+      .when(this.picker.on && i < 9, (el) => el.child(div().flex_none().px(4).bg(DESK.face).text_size(12).font_bold().text_color(DESK.text).child(String(i + 1))))
       .child(div().flex_1().min_w(0).truncate().text_size(12).font_bold().text_color(DESK.title).child(name))
       .child(
         raised(
@@ -206,8 +216,8 @@ export default class ToastRetro extends View {
       .gap(6)
       .px(10)
       .pb(10)
-      .when(Boolean(go), (el) => el.child(this.button(`toast-retro-open-${n.id}`, LABEL.open, go, true)))
-      .child(this.button(`toast-retro-dismiss-${n.id}`, LABEL.dismiss, gone, !go));
+      .when(Boolean(open), (el) => el.child(this.button(`toast-retro-open-${n.id}`, LABEL.open, open, true)))
+      .child(this.button(`toast-retro-dismiss-${n.id}`, LABEL.dismiss, gone, !open));
 
     // The raised edge adds 3 px to the width.
     return raised(v_flex().w(this.width - 3).p(2).bg(DESK.face).child(bar).child(body).child(buttons));
@@ -217,6 +227,6 @@ export default class ToastRetro extends View {
     if (this.isToast) return div();
     const cards = queue.cards();
     if (cards.length === 0) return div();
-    return v_flex().id("toast-retro").gap(6).children(cards.map((n) => this.card(n)));
+    return v_flex().id("toast-retro").gap(6).track_focus(this.picker.handle).on_key_down(this.picker.key).children(cards.map((n, i) => this.card(n, i)));
   }
 }

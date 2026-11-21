@@ -52,6 +52,10 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
 - `herdr-app do toast-retro.demo` posts three sample notifications: a Gemini error, then Codex done, then Claude needs you.
   Only two fit, so Claude and Codex show and the Gemini one is pushed out.
   The samples have no agent of their own, so their `Open` runs `agent.next` (show the next agent).
+- `herdr-app do toast-retro.pick` numbers the boxes (1 to 9) and takes the keyboard:
+  a digit does what that box's `Open` does (or `Dismiss`, when it has no `Open`), `pick` again or Enter does it for the top box; any other key gives the keyboard back to the pane it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-retro.pick"`.
 
 ## Built from
 
@@ -61,11 +65,11 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
     A copy with `overlay` and a string `title` adds a card to `shared("toast-retro.queue")` (newest first, 2 kept) and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-retro", "content": { "mod": "toast-retro" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
+    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
 - The raised edge is three nested boxes, each with two sides of a border: `border_b(1).border_r(1)` black, `border_t(1).border_l(1)` white, `border_b(1).border_r(1)` grey.
 - The title bar gradient and the triangles are painted shapes: `window.paint_path(path, Background.linear_gradient(90, from, to))` or `Background.solid(color)`, with `PathBuilder` and `Background` from `gpui-kit`, as a layer that fills its box (`absolute().top(0).left(0).size_full()`).
 - The circles are `rounded_full()` boxes; the marks are text.
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `notify`, `nextCommand`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `notify`, `nextCommand`.
   No `theme()`: the desktop colors are fixed.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - No network, no `exec`, no files read or written.
@@ -90,3 +94,5 @@ An icon for the kind, the message, and two buttons: **Open** goes to the agent, 
    Claude (orange-to-navy title bar, yellow triangle, `Claude needs you.`, `Approve edit to app.ts`) above Codex (blue-to-navy title bar, green check, `Codex is done.`, `All tests passed`), each with `Open` and `Dismiss`.
 4. `Dismiss` or `×` closes a box; `Open` on a real agent's box goes to that agent and closes it.
 5. After 10 s untouched, boxes disappear and the block hides.
+6. With `"cmd-j": "toast-retro.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1 and 2 in the title bars of the demo boxes.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.

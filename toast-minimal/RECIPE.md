@@ -53,6 +53,10 @@ Of the examples in this repo it covers the least screen.
   Pills also leave after their timeout (default 5 s), with the pointer on them or not.
 - Expired pills never show, even after Herdr restarts with an old queue.
 - `herdr-app do toast-minimal.demo` posts three sample pills: Claude needs you, Codex is done, Gemini hit an error.
+- `herdr-app do toast-minimal.pick` numbers the pills (1 to 9) and takes the keyboard:
+  a digit opens that pill as a click would, `pick` again or Enter opens the top one; any other key gives the keyboard back to the pane it came from.
+  Chords with cmd, ctrl or alt are let through, so the key bound to `pick` still works.
+  A click elsewhere ends it too. Bind it to a key in the `global` section of `keys.json` to use it: `"cmd-j": "toast-minimal.pick"`.
 
 ## Built from
 
@@ -62,11 +66,11 @@ Of the examples in this repo it covers the least screen.
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
     A copy with `overlay` and a string `title` adds a card to `shared("toast-minimal.queue")` (newest first, 3 kept) and closes itself with `closeOverlay`.
   - A floating block on the node that holds the terminals: `{ "id": "toast-minimal", "content": { "mod": "toast-minimal" }, "edge": "top", "align": "end" }`.
-    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo`.
+    That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
 - The pointer: each pill has `on_hover`, which keeps the id of the pill the pointer is on and redraws; that pill gets the extra text.
 - The pulse: `.loop("opacity", { from: 1, to: 0.2, period: 800 })` on the dot, which Herdr animates without a timer.
 - Which side to line up on comes from `placement()` (`edge` and `align`).
-- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `run`, `theme`, `notify`, `nextCommand`, `placement`.
+- `herdr` functions: `props`, `closeOverlay`, `shared`, `setShared`, `agents`, `focused`, `run`, `theme`, `notify`, `nextCommand`, `placement`.
 - `core.js` is the same file in every herdr-agent-toast mod; a build from scratch can keep it in `main.js`.
 - Icons are Herdr's own `icons/*.svg`; none ship with the mod.
   No network, no `exec`, no files read or written.
@@ -92,3 +96,5 @@ Of the examples in this repo it covers the least screen.
 3. `herdr-app do toast-minimal.demo` shows three pills top right: `Claude needs you` (orange name, pulsing dot), `Codex is done` (blue name), `Gemini hit an error` (purple name).
 4. Pointing at the Claude pill adds `Approve edit to app.ts`; moving away takes it out again.
 5. After 5 s untouched, the pills disappear and the block hides.
+6. With `"cmd-j": "toast-minimal.pick"` in the `global` section of `keys.json`, cmd-j after the demo puts 1, 2 and 3 on the demo pills.
+   Escape takes the numbers away and the keyboard goes back to the terminal it was on.
