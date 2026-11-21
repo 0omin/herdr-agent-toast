@@ -17,7 +17,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
     On a boss card it shakes 1 px left and right (`.loop("left", { from: -1, to: 1, period: 360 })`).
   - Heading, 13 px extra bold, in the kind color.
     A cleared quest that made a level says `LEVEL UP!`, and one that started the count again `REBORN!`.
-    A combo adds its count after the heading: `QUEST CLEAR! x2 COMBO` (on a narrow card, see below).
+    A combo adds its count after the heading: `QUEST CLEAR! x2 COMBO` (not on a narrow card, see below).
   - Line two, 12 px: the agent name in the agent color, bold (at most 40% of the card width), then the notification body, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent.
     On the right, in `muted`: `+50 XP · LV n` on a cleared quest (`+60 XP · LV n` in a x2 combo, `★1 LV n` after a rebirth), `click to open` on a boss card that has an action.
