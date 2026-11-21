@@ -61,7 +61,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - Monospace font: the first installed of JetBrains Mono, SF Mono, Menlo, Cascadia Mono, Consolas, DejaVu Sans Mono; else the app font.
 - A narrow spot, such as a sidebar: the floating block can pass a card width, `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (default 360; a value under 180 counts as 180).
   Under 300 px the XP and `click to open` note moves to a row of its own, under line two.
-  There the combo leaves the heading and ends that row, bold in the kind color (`+60 XP · LV n  x2`); the note is cut before the combo is.
+  There the combo leaves the heading and ends the bar row, after the metal, in 10 px bold in the kind color (`x2`); the bar gets shorter, so no text is cut for it.
 
 ## How it behaves
 
