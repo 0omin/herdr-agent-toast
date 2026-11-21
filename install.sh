@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v1.2.0)
+# herdr-agent-toast installer (v1.3.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again

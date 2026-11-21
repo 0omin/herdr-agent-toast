@@ -14,12 +14,17 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
 - Each card: theme `background`, a 2 px frame in the agent color, padding 12 by 8, `selection` on hover.
   Behind it, shifted 4 px down and right, a block in the agent color at 40% opacity: a hard pixel-game shadow.
   - Left: a 20 px glyph in the kind color, in a 24 px column.
+    On a boss card it shakes 1 px left and right (`.loop("left", { from: -1, to: 1, period: 360 })`).
   - Heading, 13 px extra bold, in the kind color.
+    A cleared quest that made a level says `LEVEL UP!`, and one that started the count again `REBORN!`.
+    A combo adds its count after the heading: `QUEST CLEAR! x2 COMBO`.
   - Line two, 12 px: the agent name in the agent color, bold (at most 40% of the card width), then the notification body, truncated.
     The title comes first unless it is Herdr's own "X needs you" / "X finished" for a known agent.
-    On the right, in `muted`: `+50 XP · LV n` on a cleared quest, `click to open` on a boss card that has an action.
+    On the right, in `muted`: `+50 XP · LV n` on a cleared quest (`+60 XP · LV n` in a x2 combo, `★1 LV n` after a rebirth), `click to open` on a boss card that has an action.
   - Line three: a bar of 10 segments, 5 px high, 2 px apart.
     Lit segments are in the kind color, the rest in `selection`.
+    Past LV 50 a bar that shows XP is lit in the metal, with the metal and its step after it in 10 px bold (`SILVER 2`).
+    On a `LEVEL UP!` or `REBORN!` card the bar blinks (`.loop("opacity", { from: 0.3, to: 1, period: 500 })`).
 - Kinds:
 
   | Kind | Heading | Glyph | Color | Bar |
@@ -29,9 +34,27 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   | error | `GAME OVER` | `✕` | `ansi1` | all lit |
   | warning | `DANGER AHEAD` | `▲`/`△` | `ansi3` | all lit |
   | notice | `NEW MESSAGE` | `✦`/`✧` | `accent` | XP inside the level |
+  | achievement | `ACHIEVEMENT!` | `✪`/`✫` | `ansi3` | all lit |
 
 - XP: every cleared quest adds 50 XP, and 500 XP make a level, starting at level 1.
   Each card shows the level and the bar of the moment it arrived.
+- Combo: a quest cleared by the same agent within 2 minutes of its last one is a combo.
+  Each step adds 10 XP, up to 50 (x2 is 60 XP, x6 and on are 100 XP).
+- Trim: from LV 51 each 5 levels are a step, 5 steps in each metal: `BRONZE` `#CD7F32`, `SILVER` `#C0C0C0`, `GOLD` `#FFD700`, `PLATINUM` `#E5E4E2`, `DIAMOND` `#7FE7FF`, `RAINBOW` `#FF77E9`.
+  `RAINBOW 5` is LV 196 to 200.
+  Past LV 200 the count starts again from LV 1 with a star: `★1 LV 1`, every 100,000 XP.
+- Achievements, each earned once and shown as a card of its own, under the quest that earned it.
+  The quest card always shows; when boss cards fill the column, an achievement card may not, though it is still earned.
+
+  | Achievement | For |
+  |---|---|
+  | `ROOKIE`, `VETERAN`, `HERO`, `LEGEND`, `MYTH` | 10, 100, 500, 1,000, 5,000 quests cleared |
+  | `MARATHON`, `IRONMAN` | 50, 100 quests in one day |
+  | `COMBO MASTER`, `UNSTOPPABLE` | a x5, x10 combo |
+  | `ON FIRE`, `DEVOTED` | 7, 30 days in a row with a cleared quest |
+  | `REBORN` | the first star |
+  | `CLEAN DAY` | the first quest of a day after a day of 10 or more and no `error` cards |
+
 - Agent colors: Claude `#D97757`, Codex `#7B8CFF`, Gemini `#8E75B2`, Cursor `#D6D8DB`, Copilot `#3FB950`, OpenCode `#F5A742`, Amp `#F34E3F`, Kiro `#9046FF`, Grok `#A0A4AB`, Kimi `#1783FF`, Crush `#FF6DAA`, Antigravity `#FFE432`, goose `#2EC4B6`, oh-my-pi `#A3E635`.
   Other agents use Herdr's own name for them, framed in the theme `accent`.
   Non-agent notifications show `Herdr`.
@@ -53,6 +76,9 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   An agent that is not in the table and whose terminal is gone keeps the name from the title.
 - XP is added when a cleared quest arrives, whether or not its card is still showing, and is kept in `shared("toast-quest.xp")`, so it survives restarts.
   The demo's cleared quest counts too.
+- Quests cleared, each day's count and `error` cards (the last 60 days), running combos and earned achievements are kept in `shared("toast-quest.stats")`.
+  The first time it is read, the quests cleared so far come from the XP (one per 50), and the quest-count achievements already passed are marked as earned without a card.
+  Days follow the computer's local time.
 - A new card always shows.
   It replaces older cards about the same terminal, so each agent shows its latest news once.
   More than 3 cards: the oldest card that is not a boss card goes first; when all are boss cards, the oldest of those.
@@ -71,8 +97,8 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   It is used in two places in the person's layout:
   - Root: `"toast": "toast-quest"`.
     Herdr opens a copy for every notification with props `{title, body, level, icon, action, timeout, overlay}`.
-    A copy with `overlay` and a string `title` adds a card to `shared("toast-quest.queue")` (newest first, 3 kept), adds 50 to `shared("toast-quest.xp")` for a cleared quest, and closes itself with `closeOverlay`.
-    The card carries the XP total, so the board never has to look it up.
+    A copy with `overlay` and a string `title` adds a card to `shared("toast-quest.queue")` (newest first, 3 kept), adds the quest's XP to `shared("toast-quest.xp")` for a cleared quest, updates `shared("toast-quest.stats")`, adds a card for each achievement earned, and closes itself with `closeOverlay`.
+    The card carries the XP total, the XP gained, the combo and whether it made a level, so the board never has to look them up.
   - A floating block on the node that holds the terminals: `{ "id": "toast-quest", "content": { "mod": "toast-quest" }, "edge": "top", "align": "end" }`.
     That copy draws the queue, drops expired cards once a second, and waits on `nextCommand()` for `demo` and `pick`.
 - The shadow: each card sits in a `relative` box 4 px wider and taller, with an `absolute` block behind it at `top` 4, `left` 4.
