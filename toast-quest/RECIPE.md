@@ -44,7 +44,7 @@ Each card is framed in the color of the agent that sent it (Claude, Codex, Gemin
   `RAINBOW 5` is LV 196 to 200.
   Past LV 200 the count starts again from LV 1 with a star: `★1 LV 1`, every 100,000 XP.
 - Achievements, each earned once and shown as a card of its own, under the quest that earned it.
-  The quest card always shows; when boss cards fill the column, an achievement card may not, though it is still earned.
+  The quest card always shows; when the column is full (boss cards, or several achievements at once), an achievement card may not, though it is still earned.
 
   | Achievement | For |
   |---|---|
