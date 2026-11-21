@@ -29,7 +29,7 @@ const KEEP = 3;
 const DEFAULT_MS = 10000;
 // Card width in px. A floating block can set its own, for a narrow spot such
 // as a sidebar: "content": { "mod": "toast-quest", "props": { "width": 228 } }.
-// Under NARROW the XP note gets a row of its own.
+// Under NARROW the XP note gets a row of its own, and the combo ends it.
 const WIDTH = 360;
 const MIN_WIDTH = 180;
 const NARROW = 300;
@@ -277,12 +277,21 @@ export default class ToastQuest extends View {
     // Past LV 50 the XP bar is in the metal, with its name and step beside it.
     const metal = kind.full ? null : rank.metal;
     const combo = Number(n.combo) || 0;
-    // A combo goes after the heading, so the note stays short.
-    const heading = `${LABEL[n.step] ?? LABEL[n.kind] ?? LABEL.info}${combo > 1 ? ` x${combo} ${LABEL.combo}` : ""}`;
+    const narrow = this.width < NARROW;
+    // A combo goes after the heading, so the note stays short. A narrow card
+    // has no room there, so it goes at the end of the note row as "x2".
+    const tag = combo > 1 ? `x${combo}` : "";
+    const heading = `${LABEL[n.step] ?? LABEL[n.kind] ?? LABEL.info}${tag && !narrow ? ` ${tag} ${LABEL.combo}` : ""}`;
     const note =
       n.kind === "done" ? `+${Number(n.gain) || XP_PER_CLEAR} XP · ${rank.label}` : n.kind === "needs" && n.action?.name ? LABEL.open : "";
-    const narrow = this.width < NARROW;
     const noteEl = () => div().flex_none().text_size(12).text_color(t.muted).child(note);
+    // The note gives way before the combo does.
+    const narrowNote = () =>
+      h_flex()
+        .gap(6)
+        .overflow_hidden()
+        .child(div().min_w_0().truncate().text_size(12).text_color(t.muted).child(note))
+        .when(Boolean(tag), (el) => el.child(div().flex_none().text_size(12).font_bold().text_color(tone).child(tag)));
     const glyph = div().flex_none().w(24).text_center().text_size(20).font_bold().text_color(tone);
     const mark = kind.glyph.length > 1 ? glyph.frames(kind.glyph, kind.ms) : glyph.child(kind.glyph[0]);
     const bar = h_flex()
@@ -330,7 +339,7 @@ export default class ToastQuest extends View {
               .child(div().flex_1().truncate().text_size(12).text_color(t.foreground).child(lineOf(n)))
               .when(Boolean(note) && !narrow, (el) => el.child(noteEl())),
           )
-          .when(Boolean(note) && narrow, (el) => el.child(noteEl()))
+          .when(Boolean(note) && narrow, (el) => el.child(narrowNote()))
           .child(
             h_flex()
               .w_full()
