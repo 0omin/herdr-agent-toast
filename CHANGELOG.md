@@ -7,6 +7,23 @@ Each mod's `main.js` starts with the version it was released in.
 - MINOR: something new (an example, an agent, a kind of notification).
 - PATCH: fixes (bugs, colors, words, docs).
 
+## v1.4.0
+
+- New example: `toast-chroma`.
+  Every agent is a pixel creature that grows with the tasks it finishes.
+  - 12 creatures, one for each agent with a color of its own but goose and oh-my-pi; those two and unknown agents use Grok's.
+  - 10 forms of 5 levels each, LV 1 to LV 50. A cleared quest is 50 XP, 500 XP make a level and combos add to it, as in `toast-quest`; 1 cleared quest in 50 is golden and worth 3 times its XP.
+  - 3 skills, opened at LV 11, 21 and 31: a skill plays on the card of a cleared quest, as dots that fly from the creature to the mob it fights.
+  - A cleared quest is a fight: a mob comes in on the card, is hit and bursts.
+  - 2 items: 1 fight in 20 drops one that is not found yet. From LV 5 a found item can be worn, one at a time, and it changes only the look.
+  - A card stays until it is clicked.
+  - Under the cards a lane shows a small creature for every agent that is open; a click goes to that agent.
+  - New commands: `menu` (then P for the party, E for the gear), `party`, `gear` and `preview`.
+  - XP, combos, found items and worn items are kept in new keys: `toast-chroma.xp`, `toast-chroma.combo`, `toast-chroma.bag`, `toast-chroma.gear`.
+- `install.sh` installs it like the others; for `toast-chroma` it also copies `creatures.js` and 12 PNG sheets, and checks that each sheet is a PNG.
+- `toast-chroma` was tested with Herdr app 0.1.17.
+- Nothing in your setup needs to change.
+
 ## v1.3.0
 
 - `toast-quest` gains combos, trim levels, achievements and motion.

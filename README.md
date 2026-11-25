@@ -10,6 +10,7 @@ They differ in how they look and behave.
 |---|---|---|
 | [`toast-agent`](toast-agent/RECIPE.md) | Cards in the top-right corner, framed in each agent's color (start here) | ![toast-agent](toast-agent/preview.png) |
 | [`toast-quest`](toast-quest/RECIPE.md) | 8-bit game cards: a boss when an agent needs you, XP for every finished task, combos, trim levels and achievements | ![toast-quest](toast-quest/preview.png) |
+| [`toast-chroma`](toast-chroma/RECIPE.md) | A pixel creature for every agent: it grows through ten forms with the tasks its agent finishes, fights a mob for each one with its skills, wears the items the mobs drop, and stands in a lane of the agents that are open | ![toast-chroma](toast-chroma/preview.png) |
 | [`toast-minimal`](toast-minimal/RECIPE.md) | One thin pill per notification: who and what, with a dot for the kind; point at it to read the rest | ![toast-minimal](toast-minimal/preview.png) |
 | [`toast-focus`](toast-focus/RECIPE.md) | Do not disturb: only needs-you and error cards show, and stay until clicked; finished tasks are just counted | ![toast-focus](toast-focus/preview.png) |
 | [`toast-history`](toast-history/RECIPE.md) | A list that keeps the last 20 notifications: it opens for each new one, then folds into a badge with the number of new rows | ![toast-history](toast-history/preview.png) |
@@ -18,7 +19,7 @@ They differ in how they look and behave.
 
 ## Install
 
-With Herdr running (app 0.1.15 or newer), on macOS (Linux should work but is untested):
+With Herdr running (app 0.1.15 or newer; `toast-chroma` was tested with 0.1.17 only), on macOS (Linux should work but is untested):
 
 ```
 curl -fsSL https://raw.githubusercontent.com/0omin/herdr-agent-toast/main/install.sh | sh -s toast-agent
@@ -41,6 +42,8 @@ Enter opens the top one, and so does the same key again when it has cmd, ctrl or
 Any other key without cmd, ctrl or alt gives the keyboard back to the pane it came from.
 Bind it to a key in the `global` section of `~/.config/herdr-app/keys.json`, for example `"cmd-j": "toast-agent.pick"`.
 
+`toast-chroma` also has a `menu` command, for example `"cmd-shift-j": "toast-chroma.menu"`: press the key, let go, then P for the party or E for the gear.
+
 ## Develop
 
 `shared/core.js` is the one source for the code every example shares.
@@ -56,7 +59,7 @@ The agents and their colors are the `AGENTS` table in `core.js`.
 
 One version for the whole repo.
 See [CHANGELOG.md](CHANGELOG.md).
-Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15).
+Tested with Herdr app 0.1.16 on macOS (v1.0.0 and earlier: 0.1.15; `toast-chroma`: 0.1.17).
 
 ## License
 

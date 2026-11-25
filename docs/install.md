@@ -4,6 +4,7 @@ Every example in this repo is one Herdr mod.
 The steps below use `toast-agent`; for another example, put its name everywhere `toast-agent` appears.
 
 Needs Herdr app 0.1.15 or newer (the layout `"toast"` key), with Herdr running.
+`toast-chroma` was tested with 0.1.17 only.
 
 ## One command (macOS, Linux)
 
@@ -15,7 +16,7 @@ Three sample cards appear in the top-right corner when it is done.
 
 What the script does, all inside `~/.config/herdr-app`:
 
-1. Copies the mod folder into `mods/`.
+1. Copies the mod folder into `mods/` (for `toast-chroma` that includes its drawings: `creatures.js` and 12 PNG sheets).
 2. If you are on a layout that ships with Herdr (such as `main`), clones it as `main-toast` and switches to the clone.
    Shipped layouts are replaced at every start, so edits to them do not last.
 3. Adds two entries to your layout file: `"toast": "toast-agent"` at the root, and a floating block over your terminals.
@@ -111,11 +112,16 @@ Edit the layout file; do not use layout.set. Finish with: herdr-app do toast-age
   To put them over another part of the window, move the floating entry to that node in the layout file.
 - `toast-agent`, `toast-quest`, `toast-focus` and `toast-hud` cards, `toast-retro` boxes and the `toast-history` list can be narrower than 360 px, for a spot such as a sidebar: `"content": { "mod": "toast-quest", "props": { "width": 228 } }` (180 at the least).
   `toast-minimal` takes the same prop: there it is the widest a pill may be.
+  `toast-chroma` takes it too (200 at the least), and `"lane": false` leaves out its lane of open agents.
 - The agent colors are fixed.
   On a light theme the pale ones (Cursor, Antigravity, oh-my-pi) are faint; change them in the `AGENTS` table in `core.js`.
 - To open cards from the keyboard, bind the example's `pick` command to a free key in the `global` section of `~/.config/herdr-app/keys.json`:
   ```json
   "cmd-j": "toast-agent.pick"
+  ```
+  `toast-chroma` has a second command to bind, `menu`: press its key, let go, then P for the party or E for the gear.
+  ```json
+  "cmd-shift-j": "toast-chroma.menu"
   ```
   The script does not touch `keys.json`.
   Herdr's own notes say an edited `keys.json` is kept as yours: new default keys from a Herdr upgrade are no longer added to it.
