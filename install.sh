@@ -1,5 +1,5 @@
 #!/bin/sh
-# herdr-agent-toast installer (v1.3.0)
+# herdr-agent-toast installer (v1.4.0)
 #
 #   sh install.sh [example]            install an example (default: toast-agent)
 #   sh install.sh uninstall [example]  take it out again
@@ -33,8 +33,10 @@ set -eu
 
 REPO="0omin/herdr-agent-toast"
 REF="${HERDR_TOAST_REF:-main}"
-EXAMPLES="toast-agent toast-quest toast-minimal toast-focus toast-history toast-hud toast-retro"
+EXAMPLES="toast-agent toast-quest toast-minimal toast-focus toast-history toast-hud toast-retro toast-chroma"
 FILES="mod.json core.js main.js"
+# toast-chroma also has its drawings. main.js stays last (see install_files).
+CHROMA_FILES="mod.json core.js creatures.js claude.png codex.png gemini.png grok.png kimi.png cursor.png copilot.png opencode.png amp.png kiro.png crush.png antigravity.png main.js"
 MARK="// herdr-agent-toast v"
 # Layouts Herdr ships, for when installed.json cannot be read.
 SHIPPED="main terminals win98"
@@ -271,8 +273,11 @@ fetch_files() {
     say "Downloaded $NAME from github.com/$REPO ($REF)."
   fi
   # A captive portal or a proxy can answer with a web page: look before installing.
-  for f in core.js main.js; do
-    head -n 1 "$src/$f" | grep -qF "$MARK" || die "$f is not the expected file (ref: $REF). Nothing was changed."
+  for f in $FILES; do
+    case "$f" in
+      *.js) head -n 1 "$src/$f" | grep -qF "$MARK" || die "$f is not the expected file (ref: $REF). Nothing was changed." ;;
+      *.png) [ "$(dd if="$src/$f" bs=1 skip=1 count=3 2>/dev/null)" = "PNG" ] || die "$f is not the expected file (ref: $REF). Nothing was changed." ;;
+    esac
   done
   if [ "$PYTHON" = "1" ]; then
     python3 "$WORK/helper.py" json "$src/mod.json" 2>/dev/null || die "mod.json is not the expected file (ref: $REF). Nothing was changed."
@@ -447,6 +452,7 @@ main() {
   if [ "${1:-}" = "uninstall" ]; then ACTION="uninstall"; shift; fi
   NAME="${1:-toast-agent}"
   case " $EXAMPLES " in *" $NAME "*) ;; *) die "unknown example \"$NAME\". Available: $EXAMPLES" ;; esac
+  if [ "$NAME" = "toast-chroma" ]; then FILES="$CHROMA_FILES"; fi
 
   HERDR_HOME="${HERDR_APP_HOME:-$HOME/.config/herdr-app}"
   [ -d "$HERDR_HOME" ] || die "Herdr's folder was not found at $HERDR_HOME. Install and start Herdr first (https://herdr.dev)."
